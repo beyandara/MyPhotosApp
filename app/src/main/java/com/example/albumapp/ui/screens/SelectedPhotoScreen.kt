@@ -40,15 +40,3 @@ fun SelectedPhotoScreen(
         }
     }
 }
-
-//@Preview
-//@Composable
-//fun SelectedPhotoPreview() {
-//    AlbumAppTheme {
-//        SelectedPhotoScreen(
-//            modifier = Modifier
-//                .fillMaxSize()
-//                .padding(8.dp)
-//        )
-//    }
-//}

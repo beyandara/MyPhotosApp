@@ -40,6 +40,6 @@ class DefaultAppContainer : AppContainer {
      * DI implementation for Album repository
      */
     override val albumRepository: AlbumRepository by lazy {
-        DefaultAlbumRepository(retrofitService)
+        NetworkAlbumRepository(retrofitService)
     }
 }

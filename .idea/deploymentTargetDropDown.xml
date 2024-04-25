@@ -2,16 +2,16 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="AmphibiansListScreenPreview">
+      <entry key="AlbumScreenPreview">
         <State />
       </entry>
       <entry key="AvailablePhotoCardPreview">
         <State />
       </entry>
-      <entry key="ErrorScreenPreview">
+      <entry key="HomeScreenPreview">
         <State />
       </entry>
-      <entry key="LoadingScreenPreview">
+      <entry key="ListScreenPreview">
         <State />
       </entry>
       <entry key="StartOrderPreview (1)">
