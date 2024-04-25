@@ -118,10 +118,10 @@ fun MarsPhotoCard(photo: Photo, modifier: Modifier = Modifier) {
         shape = MaterialTheme.shapes.medium,
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Row {
             AsyncImage(
                 model = ImageRequest.Builder(context = LocalContext.current)
-                    .data(photo.imgSrc)
+                    .data(photo.thumbnailUrl)
                     .crossfade(true)
                     .build(),
                 error = painterResource(R.drawable.ic_broken_image),
@@ -129,20 +129,23 @@ fun MarsPhotoCard(photo: Photo, modifier: Modifier = Modifier) {
                 contentDescription = "",
                 contentScale = ContentScale.FillWidth,
                 modifier = Modifier
-                    .fillMaxWidth()
+//                    .fillMaxWidth()
 //                    .height(150.dp)
                     .clickable { /* Handling for å vise bilde */ }
             )
-            Text(
-                text = photo.title,
-                modifier = Modifier.padding(8.dp).fillMaxWidth()
-            )
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.End
-            ) {
-                ShowPhotoButton(onClick = { /* Vis bilde */ })
-                DeletePhotoButton(onClick = { /* Slett bilde */ })
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+
+                Text(
+                    text = photo.title,
+                    //modifier = Modifier.padding(8.dp)
+                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    ShowPhotoButton(onClick = { /* Vis bilde */ })
+                    DeletePhotoButton(onClick = { /* Slett bilde */ })
+                }
             }
         }
     }
