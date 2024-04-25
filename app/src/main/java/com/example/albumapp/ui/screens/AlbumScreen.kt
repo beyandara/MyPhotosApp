@@ -33,7 +33,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.albumapp.model.Photo
 import com.example.albumapp.ui.theme.AlbumAppTheme
-import com.example.myphotosapp.R
+import com.example.albumapp.R
 
 @Composable
 fun AlbumScreen(
