@@ -9,4 +9,9 @@
     <string name="save">Save</string>
     <string name="loading_failed">Failed to load</string>
     <string name="loading">Loading</string>
+
+    <string name="id">Id: </string>
+    <string name="title">Title: </string>
+    <string name="album_id">AlbumId: </string>
+    <string name="Album_title">Album title: </string>
 </resources>

@@ -191,14 +191,14 @@ fun ErrorScreenPreview() {
     }
 }
 
-//@Preview(showBackground = true)
-//@Composable
-//fun PhotosGridScreenPreview() {
-//    MarsPhotosTheme {
-//        val mockData = List(15) { MarsPhoto(it, it,"title_test","url", "imgSrc") }
-//        PhotosGridScreen(mockData)
-//    }
-//}
+@Preview(showBackground = true)
+@Composable
+fun PhotosGridScreenPreview() {
+    AlbumAppTheme {
+        val mockData = List(15) { Photo(it, it,"title_test","url", "imgSrc") }
+        PhotosGridScreen(mockData)
+    }
+}
 
 
 

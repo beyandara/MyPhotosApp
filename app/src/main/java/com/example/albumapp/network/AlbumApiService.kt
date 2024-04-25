@@ -1,5 +1,6 @@
 package com.example.albumapp.network
 
+import com.example.albumapp.model.Album
 import com.example.albumapp.model.Photo
 import retrofit2.http.GET
 
@@ -16,4 +17,7 @@ interface AlbumApiService {
      */
     @GET("photos")
     suspend fun getPhotos(): List<Photo>
+
+    @GET("albums")
+    suspend fun getAlbums(): List<Album>
 }
