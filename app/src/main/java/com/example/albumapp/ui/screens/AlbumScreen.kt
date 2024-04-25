@@ -31,9 +31,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.example.albumapp.R
 import com.example.albumapp.model.Photo
 import com.example.albumapp.ui.theme.AlbumAppTheme
-import com.example.albumapp.R
 
 @Composable
 fun AlbumScreen(
@@ -51,7 +51,8 @@ fun AlbumScreen(
         ) {
             Column {
                 Text(text = stringResource(R.string.saved_photos))
-                SavedPhotoCard()
+//                SavedPhotoCard()
+            }
             }
         }
         Box(
@@ -74,7 +75,7 @@ fun AlbumScreen(
             }
         }
     }
-}
+
 
 
 @Composable
@@ -292,9 +293,7 @@ fun StartOrderPreview() {
 
             AlbumScreen(
                 albumUiState = albumViewModel.albumUiState,
-//                onShowButtonClicked = {},
-//                onSaveButtonClicked = {},
-//                onDeleteButtonClicked = {},
+
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(16.dp)

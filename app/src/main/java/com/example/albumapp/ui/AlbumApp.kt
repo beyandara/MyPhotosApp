@@ -22,10 +22,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.albumapp.R
 import com.example.albumapp.ui.screens.AlbumScreen
 import com.example.albumapp.ui.screens.AlbumViewModel
 import com.example.albumapp.ui.screens.SelectedPhotoScreen
-import com.example.albumapp.R
 
 enum class AlbumScreens {
     Start,
