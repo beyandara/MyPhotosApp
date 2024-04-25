@@ -2,12 +2,15 @@ package com.example.albumapp.ui.screens
 
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -91,7 +94,7 @@ fun PhotosGridScreen(
     contentPadding: PaddingValues = PaddingValues(0.dp),
 ) {
     LazyVerticalGrid(
-        columns = GridCells.Adaptive(150.dp),
+        columns = GridCells.Adaptive(minSize = 180.dp),
         modifier = modifier.padding(horizontal = 4.dp),
         contentPadding = contentPadding,
     ) {
@@ -114,18 +117,58 @@ fun MarsPhotoCard(photo: Photo, modifier: Modifier = Modifier) {
         shape = MaterialTheme.shapes.medium,
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {
-        AsyncImage(
-            model = ImageRequest.Builder(context = LocalContext.current).data(photo.imgSrc)
-                .crossfade(true).build(),
-            error = painterResource(R.drawable.ic_broken_image),
-            placeholder = painterResource(R.drawable.loading_img),
-            contentDescription = "",
-            contentScale = ContentScale.Crop,
-            modifier = Modifier.fillMaxWidth()
-        )
+        Column(modifier = Modifier.fillMaxWidth()) {
+            AsyncImage(
+                model = ImageRequest.Builder(context = LocalContext.current).data(photo.imgSrc)
+                    .crossfade(true).build(),
+                error = painterResource(R.drawable.ic_broken_image),
+                placeholder = painterResource(R.drawable.loading_img),
+                contentDescription = "",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(150.dp)
+                    .clickable { /* Handling for å vise bilde */ }
+            )
+            Text(
+                text = photo.title,
+                //modifier = Modifier.padding(8.dp)
+            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.End
+            ) {
+                ShowPhotoButton(onClick = { /* Vis bilde */ })
+                DeletePhotoButton(onClick = { /* Slett bilde */ })
+            }
+        }
+    }
+}
+@Composable
+fun ShowPhotoButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Button(
+        onClick = onClick,
+        modifier = modifier
+    ) {
+        Text(stringResource(R.string.show))
     }
 }
 
+@Composable
+fun DeletePhotoButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Button(
+        onClick = onClick,
+        modifier = modifier
+    ) {
+        Text(stringResource(R.string.delete))
+    }
+}
 @Preview(showBackground = true)
 @Composable
 fun LoadingScreenPreview() {
