@@ -20,7 +20,7 @@ import java.io.IOException
  * UI state for the Home screen
  */
 sealed interface AlbumUiState {
-    data class Success(val amphibians: List<Photo>) : AlbumUiState
+    data class Success(val album: List<Photo>) : AlbumUiState
     object Error : AlbumUiState
     object Loading : AlbumUiState
 }
@@ -28,9 +28,9 @@ sealed interface AlbumUiState {
 /**
  * ViewModel containing the app data and method to retrieve the data
  */
-class AlbumViewModel(private val amphibiansRepository: AlbumRepository) : ViewModel() {
+class AlbumViewModel(private val albumRepository: AlbumRepository) : ViewModel() {
 
-    var amphibiansUiState: AlbumUiState by mutableStateOf(AlbumUiState.Loading)
+    var albumUiState: AlbumUiState by mutableStateOf(AlbumUiState.Loading)
         private set
 
     init {
@@ -39,9 +39,9 @@ class AlbumViewModel(private val amphibiansRepository: AlbumRepository) : ViewMo
 
     fun getAlbum() {
         viewModelScope.launch {
-            amphibiansUiState = AlbumUiState.Loading
-            amphibiansUiState = try {
-                AlbumUiState.Success(amphibiansRepository.getAlbum())
+            albumUiState = AlbumUiState.Loading
+            albumUiState = try {
+                AlbumUiState.Success(albumRepository.getAlbum())
             } catch (e: IOException) {
                 AlbumUiState.Error
             } catch (e: HttpException) {
@@ -58,8 +58,8 @@ class AlbumViewModel(private val amphibiansRepository: AlbumRepository) : ViewMo
             initializer {
                 val application = (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY]
                         as AlbumApplication)
-                val amphibiansRepository = application.container.albumRepository
-                AlbumViewModel(amphibiansRepository = amphibiansRepository)
+                val albumRepository = application.container.albumRepository
+                AlbumViewModel(albumRepository = albumRepository)
             }
         }
     }

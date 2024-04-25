@@ -11,9 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.albumapp.ui.theme.MyPhotosAppTheme
 import com.example.myphotosapp.R
 
 @Composable
@@ -43,14 +41,14 @@ fun SelectedPhotoScreen(
     }
 }
 
-@Preview
-@Composable
-fun SelectedPhotoPreview() {
-    MyPhotosAppTheme {
-        SelectedPhotoScreen(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(8.dp)
-        )
-    }
-}
+//@Preview
+//@Composable
+//fun SelectedPhotoPreview() {
+//    AlbumAppTheme {
+//        SelectedPhotoScreen(
+//            modifier = Modifier
+//                .fillMaxSize()
+//                .padding(8.dp)
+//        )
+//    }
+//}

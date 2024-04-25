@@ -6,7 +6,7 @@ import com.example.albumapp.model.Photo
 import com.example.albumapp.network.AlbumApiService
 
 /**
- * Repository retrieves amphibian data from underlying data source.
+ * Repository retrieves photo data from underlying data source.
  */
 interface AlbumRepository {
     /** Retrieves list of album from underlying data source */
@@ -14,7 +14,7 @@ interface AlbumRepository {
 }
 
 /**
- * Network Implementation of repository that retrieves amphibian data from underlying data source.
+ * Network Implementation of repository that retrieves photo data from underlying data source.
  */
 class DefaultAlbumRepository(
     private val albumApiService: AlbumApiService

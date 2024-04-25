@@ -84,7 +84,8 @@ fun PhotoAlbumApp(
         ) {
             composable(route = AlbumScreens.Start.name) {
                 AlbumScreen(
-                    albumUiState = albumViewModel.amphibiansUiState,
+                    albumUiState = albumViewModel.albumUiState,
+//                    retryAction = albumViewModel::getAlbum,
                     onShowButtonClicked = {},
                     onSaveButtonClicked = {},
                     onDeleteButtonClicked = {},
