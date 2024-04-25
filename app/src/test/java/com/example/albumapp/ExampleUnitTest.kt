@@ -1,4 +1,4 @@
-package com.example.myphotosapp
+package com.example.albumapp
 
 import org.junit.Test
 

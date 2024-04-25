@@ -1,4 +1,4 @@
-package com.example.myphotosapp.data
+package com.example.albumapp.data
 
 data class AlbumUiState(
     val mySavedPhotos: List<String> = mutableListOf()

@@ -1,4 +1,4 @@
-package com.example.myphotosapp
+package com.example.albumapp.ui
 
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,8 +14,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -24,11 +22,12 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.myphotosapp.ui.AlbumViewModel
-import com.example.myphotosapp.ui.MyPhotosScreen
-import com.example.myphotosapp.ui.SelectedPhotoScreen
+import com.example.albumapp.ui.screens.AlbumScreen
+import com.example.albumapp.ui.screens.AlbumViewModel
+import com.example.albumapp.ui.screens.SelectedPhotoScreen
+import com.example.myphotosapp.R
 
-enum class AlbumScreen() {
+enum class AlbumScreens() {
     Start,
     Selected
 }
@@ -73,15 +72,19 @@ fun PhotoAlbumApp(
             )
         }
     ) { innerPadding ->
-        val uiState by viewModel.uiState.collectAsState()
+//        val uiState by viewModel.uiState.collectAsState()
+        val albumViewModel: AlbumViewModel =
+            viewModel(factory = AlbumViewModel.Factory)
+
 
         NavHost(
             navController = navController,
-            startDestination = AlbumScreen.Start.name,
+            startDestination = AlbumScreens.Start.name,
             modifier = Modifier.padding(innerPadding)
         ) {
-            composable(route = AlbumScreen.Start.name) {
-                MyPhotosScreen(
+            composable(route = AlbumScreens.Start.name) {
+                AlbumScreen(
+                    albumUiState = albumViewModel.amphibiansUiState,
                     onShowButtonClicked = {},
                     onSaveButtonClicked = {},
                     onDeleteButtonClicked = {},
@@ -90,7 +93,7 @@ fun PhotoAlbumApp(
                         .padding(16.dp)
                 )
             }
-            composable(route = AlbumScreen.Selected.name) {
+            composable(route = AlbumScreens.Selected.name) {
                 SelectedPhotoScreen(
                     modifier = Modifier.fillMaxHeight()
                 )

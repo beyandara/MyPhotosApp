@@ -1,4 +1,4 @@
-package com.example.myphotosapp.ui
+package com.example.albumapp.ui.screens
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
@@ -13,8 +13,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.albumapp.ui.theme.MyPhotosAppTheme
 import com.example.myphotosapp.R
-import com.example.myphotosapp.ui.theme.MyPhotosAppTheme
 
 @Composable
 fun SelectedPhotoScreen(
