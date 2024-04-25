@@ -19,14 +19,14 @@ interface AppContainer {
  * Variables are initialized lazily and the same instance is shared across the whole app.
  */
 class DefaultAppContainer : AppContainer {
-    private val BASE_URL = "https://jsonplaceholder.typicode.com/"
+    private val baseUrl = "https://jsonplaceholder.typicode.com/"
 
     /**
      * Use the Retrofit builder to build a retrofit object using a kotlinx.serialization converter
      */
     private val retrofit: Retrofit = Retrofit.Builder()
         .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
-        .baseUrl(BASE_URL)
+        .baseUrl(baseUrl)
         .build()
 
     /**

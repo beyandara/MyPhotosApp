@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Photo(
     val albumId: Int,
-    val Id: Int,
+    val id: Int,
     val title: String,
     val url: String,
     @SerialName("thumbnailUrl")

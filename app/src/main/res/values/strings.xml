@@ -3,13 +3,10 @@
     <string name="back_button">Back</string>
 
     <string name="saved_photos">Saved Photos</string>
-    <string name="my_photos">My Photos</string>
-    <string name="selected_photo">Selected Photo</string>
     <string name="photo_details">Photo details</string>
     <string name="show">Show</string>
     <string name="delete">Delete</string>
     <string name="save">Save</string>
     <string name="loading_failed">Failed to load</string>
-    <string name="retry">Retry</string>
     <string name="loading">Loading</string>
 </resources>

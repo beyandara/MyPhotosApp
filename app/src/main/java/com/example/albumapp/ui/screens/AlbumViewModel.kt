@@ -21,8 +21,8 @@ import java.io.IOException
  */
 sealed interface AlbumUiState {
     data class Success(val album: List<Photo>) : AlbumUiState
-    object Error : AlbumUiState
-    object Loading : AlbumUiState
+    data object Error : AlbumUiState
+    data object Loading : AlbumUiState
 }
 
 /**
