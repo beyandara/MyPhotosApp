@@ -85,9 +85,9 @@ fun PhotoAlbumApp(
                 AlbumScreen(
                     albumUiState = albumViewModel.albumUiState,
 //                    retryAction = albumViewModel::getAlbum,
-                    onShowButtonClicked = {},
-                    onSaveButtonClicked = {},
-                    onDeleteButtonClicked = {},
+//                    onShowButtonClicked = {},
+//                    onSaveButtonClicked = {},
+//                    onDeleteButtonClicked = {},
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(16.dp)

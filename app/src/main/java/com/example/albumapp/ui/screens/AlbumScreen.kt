@@ -38,56 +38,104 @@ import com.example.myphotosapp.R
 @Composable
 fun AlbumScreen(
     albumUiState: AlbumUiState,
-//    retryAction: () -> Unit,
-    onShowButtonClicked: () -> Unit,
-    onSaveButtonClicked: () -> Unit,
-    onDeleteButtonClicked: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = modifier
-            .fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center
     ) {
         Box(
             modifier = modifier
                 .padding(4.dp)
-                .border(BorderStroke(2.dp, Color.Black), shape = RoundedCornerShape(8.dp)),
+                .border(BorderStroke(2.dp, Color.Black), shape = RoundedCornerShape(8.dp))
         ) {
             Column {
-                Text(
-                    text = stringResource(R.string.saved_photos)
-                )
+                Text(text = stringResource(R.string.saved_photos))
                 SavedPhotoCard()
             }
         }
         Box(
             modifier = modifier
                 .padding(4.dp)
-                .border(BorderStroke(2.dp, Color.Black), shape = RoundedCornerShape(8.dp)),
+                .border(BorderStroke(2.dp, Color.Black), shape = RoundedCornerShape(8.dp))
         ) {
             Column {
-                Text(
-                    text = "jsonplaceholder"
-                )
+                Text(text = "jsonplaceholder")
                 when (albumUiState) {
                     is AlbumUiState.Loading -> LoadingScreen()
-                    is AlbumUiState.Success ->
+                    is AlbumUiState.Success -> {
                         AlbumListScreen(
                             album = albumUiState.album,
                             modifier = modifier
                         )
-                    else -> ErrorScreen()
-
-
+                    }
+                    is AlbumUiState.Error -> ErrorScreen()
                 }
-
-
-
             }
         }
     }
 }
+
+
+@Composable
+fun AvailablePhotoCard(photo: Photo,
+                       modifier: Modifier = Modifier
+) {
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+    ) {
+        Row(
+            modifier = modifier
+                .fillMaxSize()
+        ) {
+            AsyncImage(
+                modifier = Modifier.fillMaxWidth(),
+                model = ImageRequest.Builder(context = LocalContext.current)
+                    .data(photo.imgSrc)
+                    .crossfade(true)
+                    .build(),
+                contentDescription = null,
+                contentScale = ContentScale.FillWidth,
+                error = painterResource(id = R.drawable.ic_broken_image),
+                placeholder = painterResource(id = R.drawable.loading_img)
+            )
+            Column {
+                Text(
+                    text = photo.title)
+//                Row {
+//                    ShowPhotoButton(onClick = { /*TODO*/ })
+//                    SavePhotoButton(onClick = { /*TODO*/ })
+//                }
+
+            }
+
+        }
+    }
+}
+
+@Composable
+private fun AlbumListScreen(
+    album: List<Photo>,
+    modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues(0.dp)
+) {
+    LazyColumn(
+        modifier = modifier,
+        contentPadding = contentPadding,
+        verticalArrangement = Arrangement.spacedBy(24.dp)
+    ) {
+        items(
+            items = album,
+            key = { photo ->
+                photo.title
+            }
+        ){photo ->
+            AvailablePhotoCard(photo = photo, modifier = modifier.fillMaxSize())
+        }
+    }
+}
+
 
 @Composable
 fun LoadingScreen(modifier: Modifier = Modifier) {
@@ -129,80 +177,11 @@ fun SavedPhotoCard(
                 painter = painterResource(R.drawable.ic_launcher_background),
                 contentDescription = null
             )
-            ShowPhotoButton(onClick = { /*TODO*/ })
-            DeletePhotoButton(onClick = { /*TODO*/ })
+//            ShowPhotoButton(onClick = { /*TODO*/ })
+//            DeletePhotoButton(onClick = { /*TODO*/ })
         }
     }
 }
-
-@Composable
-fun AvailablePhotoCard(photo: Photo, 
-    modifier: Modifier = Modifier
-) {
-    Card(
-        modifier = modifier
-            .fillMaxWidth()
-    ) {
-        Row(
-            modifier = modifier
-                .fillMaxSize()
-        ) {
-            AsyncImage(
-                modifier = Modifier.fillMaxWidth(),
-                model = ImageRequest.Builder(context = LocalContext.current)
-                    .data(photo.imgSrc)
-                    .crossfade(true)
-                    .build(),
-                contentDescription = null,
-                contentScale = ContentScale.FillWidth,
-                error = painterResource(id = R.drawable.ic_broken_image),
-                placeholder = painterResource(id = R.drawable.loading_img)
-            )
-            Column {
-                Text(
-                    text = photo.title)
-                Row {
-                    ShowPhotoButton(onClick = { /*TODO*/ })
-                    SavePhotoButton(onClick = { /*TODO*/ })
-                }
-
-            }
-
-        }
-    }
-}
-
-@Composable
-private fun AlbumListScreen(
-    album: List<Photo>,
-    modifier: Modifier = Modifier,
-    contentPadding: PaddingValues = PaddingValues(0.dp)
-) {
-    LazyColumn(
-        modifier = modifier,
-        contentPadding = contentPadding,
-        verticalArrangement = Arrangement.spacedBy(24.dp)
-    ) {
-        items(
-            items = album,
-            key = { photo ->
-                photo.title
-            }
-        ){photo ->
-            AvailablePhotoCard(photo = photo, modifier = modifier.fillMaxSize())
-        }
-    }
-}
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -283,6 +262,24 @@ fun AmphibiansListScreenPreview() {
     }
 }
 
+@Preview
+@Composable
+fun AvailablePhotoCardPreview() {
+    AlbumAppTheme {
+
+
+        val photo =
+            Photo(
+                1,
+                2,
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do",
+                "www.test.no",
+                imgSrc = ""
+            )
+        AvailablePhotoCard(photo = photo)
+    }
+}
+
 //
 @Preview
 @Composable
@@ -295,9 +292,9 @@ fun StartOrderPreview() {
 
             AlbumScreen(
                 albumUiState = albumViewModel.albumUiState,
-                onShowButtonClicked = {},
-                onSaveButtonClicked = {},
-                onDeleteButtonClicked = {},
+//                onShowButtonClicked = {},
+//                onSaveButtonClicked = {},
+//                onDeleteButtonClicked = {},
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(16.dp)
