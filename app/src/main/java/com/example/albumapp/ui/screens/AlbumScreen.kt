@@ -43,7 +43,7 @@ fun AlbumScreen(
     when (albumUiState) {
         is AlbumUiState.Loading -> LoadingScreen(modifier = modifier.fillMaxSize())
         is AlbumUiState.Success -> PhotosGridScreen(
-            albumUiState.album, contentPadding = contentPadding, modifier = modifier.fillMaxWidth()
+            albumUiState.photos, contentPadding = contentPadding, modifier = modifier.fillMaxWidth()
         )
         is AlbumUiState.Error -> ErrorScreen(retryAction, modifier = modifier.fillMaxSize())
     }
