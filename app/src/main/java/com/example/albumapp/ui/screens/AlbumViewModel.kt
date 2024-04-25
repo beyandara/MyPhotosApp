@@ -58,7 +58,7 @@ class AlbumViewModel(private val amphibiansRepository: AlbumRepository) : ViewMo
             initializer {
                 val application = (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY]
                         as AlbumApplication)
-                val amphibiansRepository = application.container.amphibiansRepository
+                val amphibiansRepository = application.container.albumRepository
                 AlbumViewModel(amphibiansRepository = amphibiansRepository)
             }
         }

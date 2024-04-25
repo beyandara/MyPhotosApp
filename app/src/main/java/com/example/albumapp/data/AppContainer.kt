@@ -10,7 +10,7 @@ import retrofit2.Retrofit
  * Dependency Injection container at the application level.
  */
 interface AppContainer {
-    val amphibiansRepository: AmphibiansRepository
+    val albumRepository: AlbumRepository
 }
 
 /**
@@ -37,9 +37,9 @@ class DefaultAppContainer : AppContainer {
     }
 
     /**
-     * DI implementation for Amphibians repository
+     * DI implementation for Album repository
      */
-    override val amphibiansRepository: AmphibiansRepository by lazy {
-        DefaultAmphibiansRepository(retrofitService)
+    override val albumRepository: AlbumRepository by lazy {
+        DefaultAlbumRepository(retrofitService)
     }
 }
