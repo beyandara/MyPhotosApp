@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.myphotosapp"
+    namespace = "com.example.albumapp"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.myphotosapp"
+        applicationId = "com.example.albumapp"
         minSdk = 24
         targetSdk = 34
         versionCode = 1

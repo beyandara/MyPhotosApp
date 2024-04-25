@@ -25,7 +25,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.albumapp.ui.screens.AlbumScreen
 import com.example.albumapp.ui.screens.AlbumViewModel
 import com.example.albumapp.ui.screens.SelectedPhotoScreen
-import com.example.myphotosapp.R
+import com.example.albumapp.R
 
 enum class AlbumScreens {
     Start,
