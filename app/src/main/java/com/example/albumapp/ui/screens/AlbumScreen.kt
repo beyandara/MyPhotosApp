@@ -7,15 +7,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -93,18 +90,22 @@ fun PhotosGridScreen(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
 ) {
-    LazyVerticalGrid(
-        columns = GridCells.Adaptive(minSize = 180.dp),
+    LazyColumn(
         modifier = modifier.padding(horizontal = 4.dp),
         contentPadding = contentPadding,
     ) {
-        items(items = photos, key = { photo -> photo.id }) { photo ->
+        items(
+            items = photos,
+            key = { photo ->
+                photo.id
+            }
+        ) { photo ->
             MarsPhotoCard(
-                photo,
+                photo = photo,
                 modifier = modifier
-                    .padding(4.dp)
+//                    .padding(4.dp)
                     .fillMaxWidth()
-                    .aspectRatio(1.5f)
+//                    .aspectRatio(1.5f)
             )
         }
     }
@@ -117,22 +118,24 @@ fun MarsPhotoCard(photo: Photo, modifier: Modifier = Modifier) {
         shape = MaterialTheme.shapes.medium,
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {
-        Column(modifier = Modifier.fillMaxWidth()) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
             AsyncImage(
-                model = ImageRequest.Builder(context = LocalContext.current).data(photo.imgSrc)
-                    .crossfade(true).build(),
+                model = ImageRequest.Builder(context = LocalContext.current)
+                    .data(photo.imgSrc)
+                    .crossfade(true)
+                    .build(),
                 error = painterResource(R.drawable.ic_broken_image),
                 placeholder = painterResource(R.drawable.loading_img),
                 contentDescription = "",
-                contentScale = ContentScale.Crop,
+                contentScale = ContentScale.FillWidth,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(150.dp)
+//                    .height(150.dp)
                     .clickable { /* Handling for å vise bilde */ }
             )
             Text(
                 text = photo.title,
-                //modifier = Modifier.padding(8.dp)
+                modifier = Modifier.padding(8.dp).fillMaxWidth()
             )
             Row(
                 modifier = Modifier.fillMaxWidth(),
