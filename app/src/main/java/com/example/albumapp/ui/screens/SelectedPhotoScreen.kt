@@ -1,7 +1,6 @@
 package com.example.albumapp.ui.screens
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -30,7 +29,7 @@ import com.example.albumapp.ui.theme.AlbumAppTheme
 
 @Composable
 fun SelectedPhotoScreen(
-    photos: List<Photo>,
+    photo: Photo,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp)
 ) {
@@ -39,8 +38,8 @@ fun SelectedPhotoScreen(
             .fillMaxSize(),
         verticalArrangement = Arrangement.Center
     ) {
-        SelectedPhotoCard(photo = photos[0])
-        SelectedPhotoDetails(photo = photos[0])
+        SelectedPhotoCard(photo = photo)
+        SelectedPhotoDetails(photo = photo)
     }
 }
 
@@ -95,7 +94,7 @@ fun SelectedPhotoDetails(photo: Photo, modifier: Modifier = Modifier) {
 @Composable
 fun SelectedPhotoScreenPreview() {
     AlbumAppTheme {
-        val mockData = List(1) { Photo(it, it,"title_test","url", "imgSrc") }
+        val mockData =  Photo(1, 1,"title_test","url", "imgSrc")
         SelectedPhotoScreen(mockData)
     }
 }

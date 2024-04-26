@@ -34,6 +34,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.albumapp.R
 import com.example.albumapp.ui.screens.AlbumScreen
 import com.example.albumapp.ui.screens.AlbumViewModel
+import com.example.albumapp.ui.screens.SelectedPhotoScreen
 
 
 enum class AlbumScreens(@StringRes val title:Int) {
@@ -54,7 +55,8 @@ fun AlbumTopAppBar(
         scrollBehavior = scrollBehavior,
         title = {
             Text(
-                text = stringResource(R.string.app_name),
+//                text = stringResource(R.string.app_name),
+                stringResource(currentScreen.title),
                 style = MaterialTheme.typography.headlineSmall,
             )
         },
@@ -73,7 +75,9 @@ fun AlbumTopAppBar(
                 Icon(
                     painter = painterResource(R.drawable.artshopicon),   // TODO MÅ HA ET EGET IKON
                     contentDescription = null,
-                    modifier = modifier.size(40.dp).padding(4.dp)
+                    modifier = modifier
+                        .size(40.dp)
+                        .padding(4.dp)
                 )
             }
         }
@@ -84,7 +88,6 @@ fun AlbumTopAppBar(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AlbumApp(
-    viewModel: AlbumViewModel = viewModel(),
     navController: NavHostController = rememberNavController()
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
@@ -93,8 +96,9 @@ fun AlbumApp(
 
     )
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
-    val albumViewModel: AlbumViewModel =
+    val viewModel: AlbumViewModel =
         viewModel(factory = AlbumViewModel.Factory)
+
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
@@ -117,96 +121,27 @@ fun AlbumApp(
 
                 composable(route = AlbumScreens.Start.name) {
                 AlbumScreen(
-                    albumUiState = albumViewModel.albumUiState,
-                    onShowButtonClicked = {
+                    albumUiState = viewModel.albumUiState,
+                    onShowButtonClicked = {selectedPhoto ->
+                        viewModel.setSelectedPhoto(selectedPhoto)
                         navController.navigate(AlbumScreens.SelectedPhoto.name)},
                     onSaveButtonClicked = {},
-                    retryAction = albumViewModel::getAlbum,
+                    retryAction = viewModel::getAlbum,
                 )
             }
 
                 /** VIEW SELECTED PHOTO */
 
-
-                }
-            }
-        }
-
-    }
-
-
-
-
-
-
-/**
-enum class AlbumScreens {
-    Start,
-    Selected
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun AlbumAppBar(
-    canNavigateBack: Boolean,
-    navigateUp: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    TopAppBar(
-        title = { Text(stringResource(id = R.string.app_name)) },
-        colors = TopAppBarDefaults.mediumTopAppBarColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer
-        ),
-        modifier = modifier,
-        navigationIcon = {
-            if (canNavigateBack) {
-                IconButton(onClick = navigateUp) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = stringResource(R.string.back_button)
+                composable(route = AlbumScreens.SelectedPhoto.name) {
+                    val selectedPhoto = viewModel.selectedPhoto
+                    SelectedPhotoScreen(
+                        photo = selectedPhoto
                     )
                 }
             }
         }
-    )
+
+    }
 }
 
-@Composable
-fun PhotoAlbumApp(
-    navController: NavHostController = rememberNavController()
-) {
 
-    Scaffold(
-        topBar = {
-            AlbumAppBar(
-                canNavigateBack = false,
-                navigateUp = { /* TODO: implement back navigation */ }
-            )
-        }
-    ) { innerPadding ->
-//        val uiState by viewModel.uiState.collectAsState()
-        val albumViewModel: AlbumViewModel =
-            viewModel(factory = AlbumViewModel.Factory)
-
-
-        NavHost(
-            navController = navController,
-            startDestination = AlbumScreens.Start.name,
-            modifier = Modifier.padding(innerPadding)
-        ) {
-            composable(route = AlbumScreens.Start.name) {
-                AlbumScreen(
-                    albumUiState = albumViewModel.albumUiState,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(16.dp)
-                )
-            }
-            composable(route = AlbumScreens.Selected.name) {
-                SelectedPhotoScreen(
-                    modifier = Modifier.fillMaxHeight()
-                )
-            }
-        }
-    }
-} */
