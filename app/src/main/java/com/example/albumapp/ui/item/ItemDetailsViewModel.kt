@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.albumapp.data.ItemsRepository
+import com.example.albumapp.model.Photo
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterNotNull
@@ -24,7 +25,7 @@ class ItemDetailsViewModel(
      * the UI state.
      */
     val uiState: StateFlow<ItemDetailsUiState> =
-        itemsRepository.getItemStream(id = )
+        itemsRepository.getItemStream()
             .filterNotNull()
             .map {
                 ItemDetailsUiState(itemDetails = it.toItemDetails())
