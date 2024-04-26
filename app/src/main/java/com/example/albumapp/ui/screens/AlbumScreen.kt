@@ -37,19 +37,50 @@ fun AlbumScreen(
     albumUiState: AlbumUiState,
     onShowButtonClicked: (Photo) -> Unit,
     onSaveButtonClicked: (Photo) -> Unit,
+    onDeleteButtonClicked: (Photo) -> Unit,
     retryAction: () -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
 ) {
     when (albumUiState) {
         is AlbumUiState.Loading -> LoadingScreen(modifier = modifier.fillMaxSize())
-        is AlbumUiState.Success -> PhotosGridScreen(
+        is AlbumUiState.Success -> AlbumScreenLayout(
             albumUiState.photos,
             onShowButtonClicked = onShowButtonClicked,
             onSaveButtonClicked = onSaveButtonClicked,
+            onDeleteButtonClicked = onDeleteButtonClicked,
             contentPadding = contentPadding, modifier = modifier.fillMaxWidth()
         )
         is AlbumUiState.Error -> ErrorScreen(retryAction, modifier = modifier.fillMaxSize())
+    }
+}
+
+@Composable
+fun AlbumScreenLayout(
+    photos: List<Photo>,
+    onShowButtonClicked: (Photo) -> Unit,
+    onSaveButtonClicked: (Photo) -> Unit,
+    onDeleteButtonClicked: (Photo) -> Unit,
+    contentPadding: PaddingValues,
+    modifier: Modifier
+) {
+    Column {
+        PhotosGridScreen(
+            photos,
+            onShowButtonClicked = onShowButtonClicked,
+            onSaveOrDeleteButtonClicked = onDeleteButtonClicked,
+            contentPadding = contentPadding,
+            modifier = modifier.fillMaxWidth()
+        )
+        PhotosGridScreen(
+            photos,
+            onShowButtonClicked = onShowButtonClicked,
+            onSaveOrDeleteButtonClicked = onSaveButtonClicked,
+            contentPadding = contentPadding,
+            modifier = modifier.fillMaxWidth()
+        )
+
+
     }
 }
 
@@ -92,7 +123,7 @@ fun ErrorScreen(retryAction: () -> Unit, modifier: Modifier = Modifier) {
 fun PhotosGridScreen(
     photos: List<Photo>,
     onShowButtonClicked: (Photo) -> Unit,
-    onSaveButtonClicked: (Photo) -> Unit,
+    onSaveOrDeleteButtonClicked: (Photo) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
 ) {
@@ -109,7 +140,7 @@ fun PhotosGridScreen(
             MarsPhotoCard(
                 photo = photo,
                 onShowButtonClicked = onShowButtonClicked,
-                onSaveButtonClicked = onSaveButtonClicked,
+                onSaveOrDeleteButtonClicked = onSaveOrDeleteButtonClicked,
                 modifier = modifier
 //                    .padding(4.dp)
                     .fillMaxWidth()
@@ -123,7 +154,7 @@ fun PhotosGridScreen(
 fun MarsPhotoCard(
     photo: Photo,
     onShowButtonClicked: (Photo) -> Unit,
-    onSaveButtonClicked: (Photo) -> Unit,
+    onSaveOrDeleteButtonClicked: (Photo) -> Unit,
     modifier: Modifier = Modifier) {
     Card(
         modifier = modifier,
@@ -157,7 +188,7 @@ fun MarsPhotoCard(
                 ) {
                     ShowPhotoButton(onClick = { onShowButtonClicked(photo) })
 //                    DeletePhotoButton(onClick = { /* Slett bilde */ })
-                    SavePhotoButton(onClick = { onSaveButtonClicked(photo) })
+                    OnSaveOrDeleteButtonClicked(onClick = { onSaveOrDeleteButtonClicked(photo) })
                 }
             }
         }
@@ -177,7 +208,7 @@ fun ShowPhotoButton(
 }
 
 @Composable
-fun SavePhotoButton(
+fun OnSaveOrDeleteButtonClicked(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -222,7 +253,7 @@ fun ErrorScreenPreview() {
 fun PhotosGridScreenPreview() {
     AlbumAppTheme {
         val mockData = List(15) { Photo(it, it,"title_test","url", "imgSrc") }
-        PhotosGridScreen(mockData, onSaveButtonClicked = {}, onShowButtonClicked = {})
+        PhotosGridScreen(mockData, onShowButtonClicked = {}, onSaveOrDeleteButtonClicked = {})
     }
 }
 

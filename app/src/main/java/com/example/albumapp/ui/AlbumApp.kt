@@ -99,6 +99,7 @@ fun AlbumApp(
     val viewModel: AlbumViewModel =
         viewModel(factory = AlbumViewModel.Factory)
 
+
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
@@ -126,6 +127,7 @@ fun AlbumApp(
                         viewModel.setSelectedPhoto(selectedPhoto)
                         navController.navigate(AlbumScreens.SelectedPhoto.name)},
                     onSaveButtonClicked = {},
+                    onDeleteButtonClicked = {},
                     retryAction = viewModel::getAlbum,
                 )
             }
