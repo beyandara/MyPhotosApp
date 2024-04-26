@@ -1,5 +1,6 @@
 package com.example.albumapp.data
 
+import android.content.Context
 import com.example.albumapp.network.AlbumApiService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
@@ -11,6 +12,7 @@ import retrofit2.Retrofit
  */
 interface AppContainer {
     val albumRepository: AlbumRepository
+    val itemsRepository: ItemsRepository
 }
 
 /**
@@ -18,7 +20,7 @@ interface AppContainer {
  *
  * Variables are initialized lazily and the same instance is shared across the whole app.
  */
-class DefaultAppContainer : AppContainer {
+class DefaultAppContainer(private val context: Context) : AppContainer {
     private val baseUrl = "https://jsonplaceholder.typicode.com/"
 
     /**
@@ -41,5 +43,12 @@ class DefaultAppContainer : AppContainer {
      */
     override val albumRepository: AlbumRepository by lazy {
         NetworkAlbumRepository(retrofitService)
+    }
+
+    /**
+     * Implementation for [ItemsRepository]
+     */
+    override val itemsRepository: ItemsRepository by lazy {
+        OfflinePhotosRepository(PhotoDatabase.getDatabase(context).itemDao())
     }
 }

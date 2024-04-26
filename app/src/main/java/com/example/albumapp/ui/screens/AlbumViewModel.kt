@@ -1,11 +1,13 @@
 package com.example.albumapp.ui.screens
 
 
+import android.app.Application
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.createSavedStateHandle
 //import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
@@ -13,6 +15,8 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.albumapp.AlbumApplication
 import com.example.albumapp.data.AlbumRepository
 import com.example.albumapp.model.Photo
+import com.example.albumapp.ui.item.ItemDetailsViewModel
+import com.example.albumapp.ui.item.ItemEntryViewModel
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
@@ -71,6 +75,18 @@ class AlbumViewModel(private val albumRepository: AlbumRepository) : ViewModel()
                         as AlbumApplication)
                 val albumRepository = application.container.albumRepository
                 AlbumViewModel(albumRepository = albumRepository)
+            }
+            // Initializer for ItemEntryViewModel
+            initializer {
+                ItemEntryViewModel(AlbumApplication().container.itemsRepository)
+            }
+
+            // Initializer for ItemDetailsViewModel
+            initializer {
+                ItemDetailsViewModel(
+                    this.createSavedStateHandle(),
+                    AlbumApplication().container.itemsRepository
+                )
             }
         }
     }
