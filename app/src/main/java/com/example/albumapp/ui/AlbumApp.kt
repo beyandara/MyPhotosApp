@@ -36,7 +36,7 @@ import com.example.albumapp.ui.screens.AlbumScreen
 import com.example.albumapp.ui.screens.AlbumViewModel
 import com.example.albumapp.ui.screens.SelectedPhotoScreen
 
-
+//ITS WORKING!! ITS WORKING!!
 enum class AlbumScreens(@StringRes val title:Int) {
     Start(title = R.string.title),
     SelectedPhoto(title = R.string.Album_title)
