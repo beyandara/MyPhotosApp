@@ -25,7 +25,7 @@ class ItemDetailsViewModel(
      * the UI state.
      */
     val uiState: StateFlow<ItemDetailsUiState> =
-        itemsRepository.getItemStream()
+        itemsRepository.getItemStream(savedStateHandle.get<Int>("itemId") ?: 0)
             .filterNotNull()
             .map {
                 ItemDetailsUiState(itemDetails = it.toItemDetails())
