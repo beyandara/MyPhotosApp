@@ -36,6 +36,8 @@ import com.example.albumapp.ui.theme.AlbumAppTheme
 @Composable
 fun AlbumScreen(
     albumUiState: AlbumUiState,
+    onShowButtonClicked: (Photo) -> Unit,
+    onSaveButtonClicked: (Photo) -> Unit,
     retryAction: () -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
@@ -144,7 +146,8 @@ fun MarsPhotoCard(photo: Photo, modifier: Modifier = Modifier) {
                     horizontalArrangement = Arrangement.End
                 ) {
                     ShowPhotoButton(onClick = { /* Vis bilde */ })
-                    DeletePhotoButton(onClick = { /* Slett bilde */ })
+//                    DeletePhotoButton(onClick = { /* Slett bilde */ })
+                    SavePhotoButton(onClick = {})
                 }
             }
         }
@@ -160,6 +163,19 @@ fun ShowPhotoButton(
         modifier = modifier
     ) {
         Text(stringResource(R.string.show))
+    }
+}
+
+@Composable
+fun SavePhotoButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Button(
+        onClick = onClick,
+        modifier = modifier
+    ) {
+        Text(stringResource(R.string.save))
     }
 }
 
