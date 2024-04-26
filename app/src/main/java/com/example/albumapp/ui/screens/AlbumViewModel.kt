@@ -1,6 +1,7 @@
 package com.example.albumapp.ui.screens
 
 
+//import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import android.app.Application
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -8,7 +9,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.createSavedStateHandle
-//import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
@@ -30,11 +30,14 @@ sealed interface AlbumUiState {
     object Loading : AlbumUiState
 }
 
+
+
 class AlbumViewModel(private val albumRepository: AlbumRepository) : ViewModel() {
     /** The mutable State that stores the status of the most recent request */
     var albumUiState: AlbumUiState by mutableStateOf(AlbumUiState.Loading)
         private set
 
+//    var uiState: UiState by mutableStateOf(uiState)
     /**
      * Call getAlbum on init so we can display status immediately.
      */
@@ -46,9 +49,6 @@ class AlbumViewModel(private val albumRepository: AlbumRepository) : ViewModel()
 
     val selectedPhoto: Photo
         get() = _selectedPhoto!!
-
-
-
 
         fun setSelectedPhoto(photo : Photo) {
             _selectedPhoto = photo

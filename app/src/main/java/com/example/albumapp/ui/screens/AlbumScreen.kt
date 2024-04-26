@@ -15,11 +15,13 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -37,21 +39,65 @@ fun AlbumScreen(
     albumUiState: AlbumUiState,
     onShowButtonClicked: (Photo) -> Unit,
     onSaveButtonClicked: (Photo) -> Unit,
+    onDeleteButtonClicked: (Photo) -> Unit,
     retryAction: () -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
 ) {
     when (albumUiState) {
         is AlbumUiState.Loading -> LoadingScreen(modifier = modifier.fillMaxSize())
-        is AlbumUiState.Success -> PhotosGridScreen(
+        is AlbumUiState.Success -> AlbumScreenLayout(
             albumUiState.photos,
             onShowButtonClicked = onShowButtonClicked,
             onSaveButtonClicked = onSaveButtonClicked,
+            onDeleteButtonClicked = onDeleteButtonClicked,
             contentPadding = contentPadding, modifier = modifier.fillMaxWidth()
         )
         is AlbumUiState.Error -> ErrorScreen(retryAction, modifier = modifier.fillMaxSize())
     }
 }
+
+@Composable
+fun AlbumScreenLayout(
+    photos: List<Photo>,
+    onShowButtonClicked: (Photo) -> Unit,
+    onSaveButtonClicked: (Photo) -> Unit,
+    onDeleteButtonClicked: (Photo) -> Unit,
+    contentPadding: PaddingValues,
+    modifier: Modifier
+) {
+    Column() {
+        Column(
+            modifier = Modifier.weight(1.5f)
+        ) {
+            PhotosGridScreen(
+                photos,
+                delete = true,
+                onShowButtonClicked = onShowButtonClicked,
+                onSaveOrDeleteButtonClicked = onDeleteButtonClicked,
+                contentPadding = contentPadding,
+                modifier = modifier
+                    .fillMaxWidth()
+            )
+        }
+        Divider(color = Color.Black, thickness = 3.dp)
+        Column(
+            modifier = Modifier.weight(1f)
+        ) {
+            PhotosGridScreen(
+                photos,
+                delete = false,
+                onShowButtonClicked = onShowButtonClicked,
+                onSaveOrDeleteButtonClicked = onSaveButtonClicked,
+                contentPadding = contentPadding,
+                modifier = modifier
+                    .fillMaxWidth()
+            )
+        }
+    }
+}
+
+
 
 /**
  * The home screen displaying the loading message.
@@ -91,8 +137,9 @@ fun ErrorScreen(retryAction: () -> Unit, modifier: Modifier = Modifier) {
 @Composable
 fun PhotosGridScreen(
     photos: List<Photo>,
+    delete: Boolean,
     onShowButtonClicked: (Photo) -> Unit,
-    onSaveButtonClicked: (Photo) -> Unit,
+    onSaveOrDeleteButtonClicked: (Photo) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
 ) {
@@ -108,10 +155,11 @@ fun PhotosGridScreen(
         ) { photo ->
             MarsPhotoCard(
                 photo = photo,
+                delete = delete,
                 onShowButtonClicked = onShowButtonClicked,
-                onSaveButtonClicked = onSaveButtonClicked,
+                onSaveOrDeleteButtonClicked = onSaveOrDeleteButtonClicked,
                 modifier = modifier
-//                    .padding(4.dp)
+                    .padding(4.dp)
                     .fillMaxWidth()
 //                    .aspectRatio(1.5f)
             )
@@ -122,8 +170,9 @@ fun PhotosGridScreen(
 @Composable
 fun MarsPhotoCard(
     photo: Photo,
+    delete: Boolean,
     onShowButtonClicked: (Photo) -> Unit,
-    onSaveButtonClicked: (Photo) -> Unit,
+    onSaveOrDeleteButtonClicked: (Photo) -> Unit,
     modifier: Modifier = Modifier) {
     Card(
         modifier = modifier,
@@ -140,24 +189,23 @@ fun MarsPhotoCard(
                 placeholder = painterResource(R.drawable.loading_img),
                 contentDescription = "",
                 contentScale = ContentScale.FillWidth,
-//                modifier = Modifier
-////                    .fillMaxWidth()
-////                    .height(150.dp)
-//                    .clickable { /* Handling for å vise bilde */ }
             )
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
 
                 Text(
                     text = photo.title,
-                    //modifier = Modifier.padding(8.dp)
                 )
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.End
                 ) {
                     ShowPhotoButton(onClick = { onShowButtonClicked(photo) })
-//                    DeletePhotoButton(onClick = { /* Slett bilde */ })
-                    SavePhotoButton(onClick = { onSaveButtonClicked(photo) })
+                    if (delete) {
+                        DeletePhotoButton(onClick = { onSaveOrDeleteButtonClicked(photo)})
+                    } else {
+                        SavePhotoButton(onClick = { onSaveOrDeleteButtonClicked(photo)})
+                    }
+
                 }
             }
         }
@@ -177,19 +225,6 @@ fun ShowPhotoButton(
 }
 
 @Composable
-fun SavePhotoButton(
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Button(
-        onClick = onClick,
-        modifier = modifier
-    ) {
-        Text(stringResource(R.string.save))
-    }
-}
-
-@Composable
 fun DeletePhotoButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -199,6 +234,19 @@ fun DeletePhotoButton(
         modifier = modifier
     ) {
         Text(stringResource(R.string.delete))
+    }
+}
+
+@Composable
+fun SavePhotoButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Button(
+        onClick = onClick,
+        modifier = modifier
+    ) {
+        Text(stringResource(R.string.save))
     }
 }
 @Preview(showBackground = true)
@@ -222,7 +270,8 @@ fun ErrorScreenPreview() {
 fun PhotosGridScreenPreview() {
     AlbumAppTheme {
         val mockData = List(15) { Photo(it, it,"title_test","url", "imgSrc") }
-        PhotosGridScreen(mockData, onSaveButtonClicked = {}, onShowButtonClicked = {})
+        PhotosGridScreen(mockData, delete = true, onShowButtonClicked = {}, onSaveOrDeleteButtonClicked = {})
+        PhotosGridScreen(mockData, delete = false, onShowButtonClicked = {}, onSaveOrDeleteButtonClicked = {})
     }
 }
 

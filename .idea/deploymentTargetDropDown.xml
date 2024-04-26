@@ -2,9 +2,6 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="AlbumScreenPreview">
-        <State />
-      </entry>
       <entry key="AvailablePhotoCardPreview">
         <State />
       </entry>
@@ -12,6 +9,9 @@
         <State />
       </entry>
       <entry key="MainActivity">
+        <State />
+      </entry>
+      <entry key="PhotosGridScreenPreview">
         <State />
       </entry>
       <entry key="SelectedPhotoScreenPreview">
