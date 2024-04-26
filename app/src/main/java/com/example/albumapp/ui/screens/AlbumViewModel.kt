@@ -2,21 +2,20 @@ package com.example.albumapp.ui.screens
 
 
 //import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
-import android.app.Application
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.albumapp.AlbumApplication
 import com.example.albumapp.data.AlbumRepository
+import com.example.albumapp.data.Item
 import com.example.albumapp.model.Photo
-import com.example.albumapp.ui.item.ItemDetailsViewModel
-import com.example.albumapp.ui.item.ItemEntryViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
@@ -36,6 +35,10 @@ class AlbumViewModel(private val albumRepository: AlbumRepository) : ViewModel()
     /** The mutable State that stores the status of the most recent request */
     var albumUiState: AlbumUiState by mutableStateOf(AlbumUiState.Loading)
         private set
+
+    // Mutable state for the list of saved items
+    private val _savedItems = MutableStateFlow<List<Item>>(emptyList())
+    val savedItems: StateFlow<List<Item>> get() = _savedItems
 
 //    var uiState: UiState by mutableStateOf(uiState)
     /**
@@ -67,6 +70,11 @@ class AlbumViewModel(private val albumRepository: AlbumRepository) : ViewModel()
         }
     }
 
+    // Function to update the list of saved items
+    fun updateSavedItems(items: List<Item>) {
+        _savedItems.value = items
+    }
+
 
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
@@ -75,18 +83,6 @@ class AlbumViewModel(private val albumRepository: AlbumRepository) : ViewModel()
                         as AlbumApplication)
                 val albumRepository = application.container.albumRepository
                 AlbumViewModel(albumRepository = albumRepository)
-            }
-            // Initializer for ItemEntryViewModel
-            initializer {
-                ItemEntryViewModel(AlbumApplication().container.itemsRepository)
-            }
-
-            // Initializer for ItemDetailsViewModel
-            initializer {
-                ItemDetailsViewModel(
-                    this.createSavedStateHandle(),
-                    AlbumApplication().container.itemsRepository
-                )
             }
         }
     }
