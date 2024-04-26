@@ -10,5 +10,6 @@ buildscript {
         set("lifecycle_version", "2.6.2")
         set("compose_compiler_version", "1.5.2")
         set("retrofit2_version", "2.9.0")
+        set("room_version", "2.6.0")
     }
 }
