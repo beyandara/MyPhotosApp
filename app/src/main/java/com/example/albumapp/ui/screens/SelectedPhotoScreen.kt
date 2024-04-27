@@ -7,10 +7,13 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -21,7 +24,6 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -42,13 +44,19 @@ fun SelectedPhotoScreen(
         Column(
             modifier = modifier
                 .fillMaxSize(),
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             SelectedPhotoCard(photo = photo)
             SelectedPhotoDetails(photo = photo)
         }
     } else {
-        Row {
+        Row(
+            modifier = modifier
+                .fillMaxSize(),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.Top
+        ) {
             Box(modifier = modifier.weight(1f)) {
                 SelectedPhotoCard(photo = photo)
             }
@@ -63,8 +71,7 @@ fun SelectedPhotoScreen(
 @Composable
 fun SelectedPhotoCard(photo: Photo, modifier: Modifier = Modifier) {
     Card(
-        modifier = modifier
-            .padding(4.dp),
+        modifier = modifier.padding(2.dp),
         border = BorderStroke(2.dp, Color.Black)
     ) {
         AsyncImage(
@@ -87,23 +94,23 @@ fun SelectedPhotoCard(photo: Photo, modifier: Modifier = Modifier) {
 fun SelectedPhotoDetails(photo: Photo, modifier: Modifier = Modifier) {
     Card(
         modifier = modifier
-            .padding(4.dp)
             .fillMaxSize(),
         border = BorderStroke(2.dp, Color.Black)
     ) {
-        Column {
-            Row(
-//                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(text = stringResource(R.string.photo_details),
-                    fontWeight = FontWeight.Bold)
-            }
+        Column(modifier = modifier.padding(10.dp)) {
+
+            Text(text = stringResource(R.string.photo_details),
+                style = MaterialTheme.typography.titleLarge
+            )
+            Spacer(modifier = Modifier.height(8.dp))
             Text(text = stringResource(R.string.id, photo.id))
+            Spacer(modifier = Modifier.height(4.dp))
             Text(text = stringResource(R.string.title, photo.title))
+            Spacer(modifier = Modifier.height(4.dp))
             Text(text = stringResource(R.string.album_id, photo.albumId))
+            Spacer(modifier = Modifier.height(4.dp))
             Text(text = stringResource(R.string.Album_title))
+
         }
     }
 }
@@ -115,7 +122,7 @@ fun SelectedPhotoScreenPreview() {
         SelectedPhotoScreen(mockData)
     }
 }
-@Preview(showBackground = true, widthDp = 640, heightDp = 360)
+@Preview(showBackground = true, widthDp = 640, heightDp = 400)
 @Composable
 fun SelectedPhotoScreenLandscapePreview() {
     AlbumAppTheme {

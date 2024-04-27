@@ -25,6 +25,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -130,14 +132,25 @@ fun AlbumScreenLayout(
     } else {
         Row {
             Box(modifier = modifier.weight(1f)) {
-                PhotosGridScreen(
-                    photos = savedPhotosList,
-                    delete = false,
-                    onShowButtonClicked = onShowButtonClicked,
-                    onSaveOrDeleteButtonClicked = onDeleteButtonClicked,
-                    contentPadding = contentPadding,
-                    modifier = modifier.fillMaxWidth()
-                )
+                if (savedPhotosList.isEmpty()) {
+                    Text(
+                        text = stringResource(R.string.no_saved_photos),
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.titleLarge,
+                        modifier = Modifier
+                            .padding(contentPadding)
+                    )
+                } else {
+                    PhotosGridScreen(
+                        photos = savedPhotosList,
+                        delete = true,
+                        onShowButtonClicked = onShowButtonClicked,
+                        onSaveOrDeleteButtonClicked = onDeleteButtonClicked,
+                        contentPadding = contentPadding,
+                        modifier = modifier
+                            .fillMaxWidth()
+                    )
+                }
                 Divider(color = Color.Black, thickness = 3.dp)
             }
             Box(modifier = modifier.weight(1f)) {
