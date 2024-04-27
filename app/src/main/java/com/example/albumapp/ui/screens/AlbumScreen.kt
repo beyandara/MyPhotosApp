@@ -2,12 +2,14 @@ package com.example.albumapp.ui.screens
 
 
 import android.content.res.Configuration
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -239,7 +241,11 @@ fun PhotoCard(
     onSaveOrDeleteButtonClicked: (Photo) -> Unit,
     modifier: Modifier = Modifier) {
     Card(
-        modifier = modifier,
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
+        border = BorderStroke(1.dp, Color.Black),
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(8.dp),
         shape = MaterialTheme.shapes.medium,
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {
@@ -254,20 +260,28 @@ fun PhotoCard(
                 contentDescription = "",
                 contentScale = ContentScale.FillWidth,
             )
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Column {
+                Row() {
 
-                Text(
-                    text = photo.title,
-                )
+                    Text(
+                        text = photo.title,
+                    )
+                }
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.End
                 ) {
                     ShowPhotoButton(photo = photo, onClick = { onShowButtonClicked(photo) })
                     if (delete) {
-                        DeletePhotoButton(photo = photo, savedPhotosList = savedPhotosList, onClick = { onSaveOrDeleteButtonClicked(photo)})
+                        DeletePhotoButton(
+                            photo = photo,
+                            savedPhotosList = savedPhotosList,
+                            onClick = { onSaveOrDeleteButtonClicked(photo) })
                     } else {
-                        SavePhotoButton(photo = photo, savedPhotosList = savedPhotosList, onClick = { onSaveOrDeleteButtonClicked(photo)})
+                        SavePhotoButton(
+                            photo = photo,
+                            savedPhotosList = savedPhotosList,
+                            onClick = { onSaveOrDeleteButtonClicked(photo) })
                     }
 
                 }
