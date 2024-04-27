@@ -49,6 +49,6 @@ class DefaultAppContainer(private val context: Context) : AppContainer {
      * Implementation for [ItemsRepository]
      */
     override val itemsRepository: ItemsRepository by lazy {
-        OfflinePhotosRepository(PhotoDatabase.getDatabase(context).itemDao())
+        OfflinePhotosRepository(PhotoDatabase.getDatabase(context).photoDao())
     }
 }

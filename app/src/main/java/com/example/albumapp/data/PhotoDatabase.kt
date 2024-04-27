@@ -4,14 +4,15 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.example.albumapp.model.Photo
 
 /**
  * Database class with a singleton Instance object.
  */
-@Database(entities = [Item::class], version = 1, exportSchema = false)
+@Database(entities = [Photo::class], version = 1, exportSchema = false)
 abstract class PhotoDatabase : RoomDatabase() {
 
-    abstract fun itemDao(): ItemDao
+    abstract fun photoDao(): PhotoDao
 
     companion object {
         @Volatile
@@ -20,7 +21,7 @@ abstract class PhotoDatabase : RoomDatabase() {
         fun getDatabase(context: Context): PhotoDatabase {
             // if the Instance is not null, return it, otherwise create a new database instance.
             return Instance ?: synchronized(this) {
-                Room.databaseBuilder(context, PhotoDatabase::class.java, "item_database")
+                Room.databaseBuilder(context, PhotoDatabase::class.java, "photo_database")
                     /**
                      * Setting this option in your app's database builder means that Room
                      * permanently deletes all data from the tables in your database when it
