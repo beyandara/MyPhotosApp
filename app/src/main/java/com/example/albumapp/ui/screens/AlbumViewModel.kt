@@ -10,19 +10,15 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import androidx.room.PrimaryKey
 import com.example.albumapp.AlbumApplication
 import com.example.albumapp.data.AlbumRepository
-import com.example.albumapp.data.Item
 import com.example.albumapp.data.ItemsRepository
 import com.example.albumapp.model.Photo
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import kotlinx.serialization.SerialName
 import retrofit2.HttpException
 import java.io.IOException
 
@@ -90,6 +86,10 @@ class AlbumViewModel(private val albumRepository: AlbumRepository, private val i
         itemsRepository.insertItem(photoUiState.photoDetails.toPhoto())
     }
 
+    suspend fun deleteItem() {
+        itemsRepository.deleteItem(photoUiState.photoDetails.toPhoto())
+    }
+
 
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
@@ -117,6 +117,7 @@ data class PhotoDetails(
     val imgSrc: String = "",
     val thumbnailUrl: String = ""
 )
+
 
 /**
  * Extension function to convert [PhotoUiState] to [Photo].

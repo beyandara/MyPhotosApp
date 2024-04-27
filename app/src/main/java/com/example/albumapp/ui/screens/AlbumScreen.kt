@@ -216,6 +216,7 @@ fun PhotosGridScreen(
             }
         ) { photo ->
             PhotoCard(
+                savedPhotosList = photos,
                 photo = photo,
                 delete = delete,
                 onShowButtonClicked = onShowButtonClicked,
@@ -231,6 +232,7 @@ fun PhotosGridScreen(
 
 @Composable
 fun PhotoCard(
+    savedPhotosList: List<Photo>,
     photo: Photo,
     delete: Boolean,
     onShowButtonClicked: (Photo) -> Unit,
@@ -261,11 +263,11 @@ fun PhotoCard(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.End
                 ) {
-                    ShowPhotoButton(onClick = { onShowButtonClicked(photo) })
+                    ShowPhotoButton(photo = photo, onClick = { onShowButtonClicked(photo) })
                     if (delete) {
-                        DeletePhotoButton(onClick = { onSaveOrDeleteButtonClicked(photo)})
+                        DeletePhotoButton(photo = photo, savedPhotosList = savedPhotosList, onClick = { onSaveOrDeleteButtonClicked(photo)})
                     } else {
-                        SavePhotoButton(onClick = { onSaveOrDeleteButtonClicked(photo)})
+                        SavePhotoButton(photo = photo, savedPhotosList = savedPhotosList, onClick = { onSaveOrDeleteButtonClicked(photo)})
                     }
 
                 }
@@ -277,11 +279,15 @@ fun PhotoCard(
 
 @Composable
 fun ShowPhotoButton(
+    photo: Photo,
+
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Button(
-        onClick = onClick,
+        onClick = {onClick()
+            println("Saved photo id: ${photo.id}")},
+
         modifier = modifier
     ) {
         Text(stringResource(R.string.show))
@@ -290,11 +296,17 @@ fun ShowPhotoButton(
 
 @Composable
 fun DeletePhotoButton(
+    photo: Photo,
+
+    savedPhotosList: List<Photo>,
+
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Button(
-        onClick = onClick,
+        onClick = {onClick()
+        println("Saved Photos List size: ${savedPhotosList.size}")
+        println("deleted photo id: ${photo.id}")},
         modifier = modifier
     ) {
         Text(stringResource(R.string.delete))
@@ -303,11 +315,16 @@ fun DeletePhotoButton(
 
 @Composable
 fun SavePhotoButton(
+    photo: Photo,
+    savedPhotosList: List<Photo>,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Button(
-        onClick = onClick,
+        onClick = {
+            onClick()
+            println("Saved Photos List size: ${savedPhotosList.size}")
+            println("Saved photo id: ${photo.id}")},
         modifier = modifier
     ) {
         Text(stringResource(R.string.save))
