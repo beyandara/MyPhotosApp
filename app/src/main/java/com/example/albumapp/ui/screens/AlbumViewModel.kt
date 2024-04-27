@@ -67,6 +67,10 @@ class AlbumViewModel(private val albumRepository: AlbumRepository, private val i
             _selectedPhoto = photo
         }
 
+
+
+
+
     fun getAlbum() {
         viewModelScope.launch {
             albumUiState = AlbumUiState.Loading
@@ -82,12 +86,15 @@ class AlbumViewModel(private val albumRepository: AlbumRepository, private val i
     /**
      * Inserts a [Photo] in the Room database
      */
-    suspend fun saveItem() {
-        itemsRepository.insertItem(photoUiState.photoDetails.toPhoto())
+    suspend fun saveItem(selectedPhoto : Photo) {
+        itemsRepository.insertItem(selectedPhoto)
+//        fun saveSelectedPhoto(photo : Photo) {
+//            val photoToSave = photoUiState.photoDetails.toPhoto()
+//            itemsRepository.insertItem(photoToSave)
     }
 
-    suspend fun deleteItem() {
-        itemsRepository.deleteItem(photoUiState.photoDetails.toPhoto())
+    suspend fun deleteItem(selectedPhoto : Photo) {
+        itemsRepository.deleteItem(selectedPhoto)
     }
 
 

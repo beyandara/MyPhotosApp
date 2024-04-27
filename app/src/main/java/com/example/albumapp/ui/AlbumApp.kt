@@ -126,13 +126,15 @@ fun AlbumApp(
                         onShowButtonClicked = {selectedPhoto ->
                             viewModel.setSelectedPhoto(selectedPhoto)
                             navController.navigate(AlbumScreens.SelectedPhoto.name) },
-                        onSaveButtonClicked = {
+                        onSaveButtonClicked = {selectedPhoto ->
+                            viewModel.setSelectedPhoto(selectedPhoto)
                             coroutineScope.launch {
-                            viewModel.saveItem()
+                            viewModel.saveItem(selectedPhoto)
                             } },
-                        onDeleteButtonClicked = {
+                        onDeleteButtonClicked = {selectedPhoto ->
+                            viewModel.setSelectedPhoto(selectedPhoto)
                             coroutineScope.launch {
-                                viewModel.deleteItem()
+                                viewModel.deleteItem(selectedPhoto)
                             }
                         },
                         retryAction = viewModel::getAlbum,
