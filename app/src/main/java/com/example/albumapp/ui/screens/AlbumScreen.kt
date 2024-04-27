@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -21,8 +22,9 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -34,30 +36,33 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.albumapp.R
 import com.example.albumapp.model.Photo
 import com.example.albumapp.ui.theme.AlbumAppTheme
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 @Composable
 fun AlbumScreen(
     albumUiState: AlbumUiState,
-    savedItems: List<Photo>,
     onShowButtonClicked: (Photo) -> Unit,
     onSaveButtonClicked: (Photo) -> Unit,
     onDeleteButtonClicked: (Photo) -> Unit,
     retryAction: () -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
+    //viewModel: AlbumViewModel
+    viewModel : AlbumViewModel = viewModel(factory = AlbumViewModel.Factory)
 ) {
-    val savedItemsState = remember { mutableStateOf(emptyList<Photo>()) }
-
     when (albumUiState) {
         is AlbumUiState.Loading -> LoadingScreen(modifier = modifier.fillMaxSize())
         is AlbumUiState.Success -> AlbumScreenLayout(
             albumUiState.photos,
-            savedItems = savedItemsState.value,
+            savedPhotosList = viewModel.homeUiState.collectAsState().value.savedPhotoList,
             onShowButtonClicked = onShowButtonClicked,
             onSaveButtonClicked = onSaveButtonClicked,
             onDeleteButtonClicked = onDeleteButtonClicked,
@@ -71,7 +76,7 @@ fun AlbumScreen(
 @Composable
 fun AlbumScreenLayout(
     photos: List<Photo>,
-    savedItems: List<Photo>,
+    savedPhotosList: List<Photo>,
     onShowButtonClicked: (Photo) -> Unit,
     onSaveButtonClicked: (Photo) -> Unit,
     onDeleteButtonClicked: (Photo) -> Unit,
@@ -79,7 +84,6 @@ fun AlbumScreenLayout(
     modifier: Modifier
 ) {
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
-
     if (!isLandscape) {
         Column() {
             Column(
@@ -87,7 +91,8 @@ fun AlbumScreenLayout(
                     .weight(1f)
                     .padding(top = 16.dp)
             ) {
-                if (savedItems.isEmpty()) {
+                //Spacer(modifier = Modifier.size(8.dp))
+                if (savedPhotosList.isEmpty()) {
                     Text(
                         text = stringResource(R.string.no_saved_photos),
                         textAlign = TextAlign.Center,
@@ -97,10 +102,10 @@ fun AlbumScreenLayout(
                     )
                 } else {
                     PhotosGridScreen(
-                        photos,
+                        photos = savedPhotosList,
                         delete = true,
                         onShowButtonClicked = onShowButtonClicked,
-                        onSaveOrDeleteButtonClicked = onSaveButtonClicked,
+                        onSaveOrDeleteButtonClicked = onDeleteButtonClicked,
                         contentPadding = contentPadding,
                         modifier = modifier
                             .fillMaxWidth()
@@ -112,7 +117,7 @@ fun AlbumScreenLayout(
                 modifier = Modifier.weight(1.5f)
             ) {
                 PhotosGridScreen(
-                    photos,
+                    photos = photos,
                     delete = false,
                     onShowButtonClicked = onShowButtonClicked,
                     onSaveOrDeleteButtonClicked = onSaveButtonClicked,
@@ -126,10 +131,10 @@ fun AlbumScreenLayout(
         Row {
             Box(modifier = modifier.weight(1f)) {
                 PhotosGridScreen(
-                    photos = savedItems,
+                    photos = savedPhotosList,
                     delete = false,
                     onShowButtonClicked = onShowButtonClicked,
-                    onSaveOrDeleteButtonClicked = onSaveButtonClicked,
+                    onSaveOrDeleteButtonClicked = onDeleteButtonClicked,
                     contentPadding = contentPadding,
                     modifier = modifier.fillMaxWidth()
                 )
@@ -217,37 +222,6 @@ fun PhotosGridScreen(
     }
 }
 
-/**
- * Display saved photos.
- */
-@Composable
-fun SavedPhotosGridScreen(
-    itemList: List<Photo>,
-    delete: Boolean,
-    onSaveOrDeleteButtonClicked: (Photo) -> Unit,
-    modifier: Modifier = Modifier,
-    contentPadding: PaddingValues = PaddingValues(0.dp),
-) {
-    LazyColumn(
-        modifier = modifier.padding(horizontal = 4.dp),
-        contentPadding = contentPadding,
-    ) {
-        items(
-            items = itemList, key = { it.id }
-        ) { item ->
-            ItemCard(
-                item = item,
-                delete = delete,
-                onSaveOrDeleteButtonClicked = onSaveOrDeleteButtonClicked,
-                modifier = modifier
-                    .padding(4.dp)
-                    .fillMaxWidth()
-            )
-        }
-    }
-}
-
-
 @Composable
 fun PhotoCard(
     photo: Photo,
@@ -293,48 +267,6 @@ fun PhotoCard(
     }
 }
 
-@Composable
-fun ItemCard(
-    item: Photo,
-    delete: Boolean,
-    onSaveOrDeleteButtonClicked: (Photo) -> Unit,
-    modifier: Modifier = Modifier) {
-    Card(
-        modifier = modifier,
-        shape = MaterialTheme.shapes.medium,
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
-    ) {
-        Row {
-            AsyncImage(
-                model = ImageRequest.Builder(context = LocalContext.current)
-                    .data(item.thumbnailUrl)
-                    .crossfade(true)
-                    .build(),
-                error = painterResource(R.drawable.ic_broken_image),
-                placeholder = painterResource(R.drawable.loading_img),
-                contentDescription = "",
-                contentScale = ContentScale.FillWidth,
-            )
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-
-                Text(
-                    text = item.title,
-                )
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End
-                ) {
-                    //ShowPhotoButton(onClick = { onShowButtonClicked(item) })
-                    if (delete) {
-                        DeletePhotoButton(onClick = { onSaveOrDeleteButtonClicked(item)})
-                    } else {
-                        SavePhotoButton(onClick = { onSaveOrDeleteButtonClicked(item)})
-                    }
-                }
-            }
-        }
-    }
-}
 
 @Composable
 fun ShowPhotoButton(
@@ -409,9 +341,10 @@ fun AlbumScreenLayoutLandscapePreview() {
     val modifier: Modifier = Modifier
     val contentPadding: PaddingValues = PaddingValues(0.dp)
 
+
     AlbumScreenLayout(
         photos = photosMockData,
-        savedItems = itemsMockData,
+        savedPhotosList = itemsMockData,
         onShowButtonClicked = {},
         onSaveButtonClicked = {},
         onDeleteButtonClicked = {},
@@ -430,7 +363,7 @@ fun AlbumScreenLayoutPortraitPreview() {
 
     AlbumScreenLayout(
         photos = photosMockData,
-        savedItems = itemsMockData,
+        savedPhotosList = itemsMockData,
         onShowButtonClicked = {},
         onSaveButtonClicked = {},
         onDeleteButtonClicked = {},

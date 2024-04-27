@@ -22,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
@@ -37,6 +38,7 @@ import com.example.albumapp.R
 import com.example.albumapp.ui.screens.AlbumScreen
 import com.example.albumapp.ui.screens.AlbumViewModel
 import com.example.albumapp.ui.screens.SelectedPhotoScreen
+import kotlinx.coroutines.launch
 
 enum class AlbumScreens(@StringRes val title:Int) {
     Start(title = R.string.title),
@@ -98,9 +100,7 @@ fun AlbumApp(
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val viewModel: AlbumViewModel =
         viewModel(factory = AlbumViewModel.Factory)
-
-    val savedItemsState = viewModel.savedItems.collectAsState(initial = emptyList())
-
+    val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -124,13 +124,16 @@ fun AlbumApp(
                 composable(route = AlbumScreens.Start.name) {
                     AlbumScreen(
                         albumUiState = viewModel.albumUiState,
-                        savedItems = savedItemsState.value,
                         onShowButtonClicked = {selectedPhoto ->
                             viewModel.setSelectedPhoto(selectedPhoto)
                             navController.navigate(AlbumScreens.SelectedPhoto.name) },
-                        onSaveButtonClicked = {},
-                        onDeleteButtonClicked = {},
+                        onSaveButtonClicked = {
+                            coroutineScope.launch {
+                            viewModel.saveItem()
+                            } },
+                        onDeleteButtonClicked = { },
                         retryAction = viewModel::getAlbum,
+                        viewModel = viewModel
                     )
                 }
 

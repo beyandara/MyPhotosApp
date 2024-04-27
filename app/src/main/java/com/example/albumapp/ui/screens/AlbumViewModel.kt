@@ -10,37 +10,51 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import androidx.room.PrimaryKey
 import com.example.albumapp.AlbumApplication
 import com.example.albumapp.data.AlbumRepository
 import com.example.albumapp.data.Item
+import com.example.albumapp.data.ItemsRepository
 import com.example.albumapp.model.Photo
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.serialization.SerialName
 import retrofit2.HttpException
 import java.io.IOException
 
-/**
- * UI state for the Home screen
- */
+
 sealed interface AlbumUiState {
     data class Success(val photos: List<Photo>) : AlbumUiState
     object Error : AlbumUiState
     object Loading : AlbumUiState
 }
 
-
-
-class AlbumViewModel(private val albumRepository: AlbumRepository) : ViewModel() {
+class AlbumViewModel(private val albumRepository: AlbumRepository, private val itemsRepository: ItemsRepository) : ViewModel() {
     /** The mutable State that stores the status of the most recent request */
     var albumUiState: AlbumUiState by mutableStateOf(AlbumUiState.Loading)
         private set
 
-    // Mutable state for the list of saved items
-    private val _savedItems = MutableStateFlow<List<Photo>>(emptyList())
-    val savedItems: StateFlow<List<Photo>> get() = _savedItems
+    /**
+     * Holds current item ui state
+     */
+    var photoUiState by mutableStateOf(PhotoUiState())
+        private set
+    /**
+     * Holds home ui state. The list of photos are retrieved from [ItemsRepository] and mapped to
+     * [HomeUiState]
+     */
+    val homeUiState: StateFlow<HomeUiState> =
+        itemsRepository.getAllItemsStream().map { HomeUiState(it) }
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
+                initialValue = HomeUiState()
+            )
 
-//    var uiState: UiState by mutableStateOf(uiState)
     /**
      * Call getAlbum on init so we can display status immediately.
      */
@@ -69,10 +83,11 @@ class AlbumViewModel(private val albumRepository: AlbumRepository) : ViewModel()
             }
         }
     }
-
-    // Function to update the list of saved items
-    fun updateSavedItems(items: List<Photo>) {
-        _savedItems.value = items
+    /**
+     * Inserts a [Photo] in the Room database
+     */
+    suspend fun saveItem() {
+        itemsRepository.insertItem(photoUiState.photoDetails.toPhoto())
     }
 
 
@@ -82,8 +97,52 @@ class AlbumViewModel(private val albumRepository: AlbumRepository) : ViewModel()
                 val application = (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY]
                         as AlbumApplication)
                 val albumRepository = application.container.albumRepository
-                AlbumViewModel(albumRepository = albumRepository)
+                val itemsRepository = application.container.itemsRepository
+                AlbumViewModel(albumRepository = albumRepository, itemsRepository = itemsRepository)
             }
         }
+        private const val TIMEOUT_MILLIS = 5_000L
     }
 }
+
+data class PhotoUiState(
+    val photoDetails: PhotoDetails = PhotoDetails()
+)
+data class HomeUiState(val savedPhotoList: List<Photo> = listOf())
+
+data class PhotoDetails(
+    val albumId: Int = 0,
+    val id: Int = 0,
+    val title: String = "",
+    val imgSrc: String = "",
+    val thumbnailUrl: String = ""
+)
+
+/**
+ * Extension function to convert [PhotoUiState] to [Photo].
+ */
+fun PhotoDetails.toPhoto(): Photo = Photo(
+    albumId = albumId,
+    id = id,
+    title = title,
+    imgSrc = imgSrc,
+    thumbnailUrl = thumbnailUrl
+)
+
+/**
+ * Extension function to convert [Photo] to [PhotoUiState]
+ */
+fun Photo.toPhotoUiState(): PhotoUiState = PhotoUiState(
+    photoDetails = this.toPhotoDetails()
+)
+
+/**
+ * Extension function to convert [Photo] to [PhotoDetails]
+ */
+fun Photo.toPhotoDetails(): PhotoDetails = PhotoDetails(
+    albumId = albumId,
+    id = id,
+    title = title,
+    imgSrc = imgSrc,
+    thumbnailUrl = thumbnailUrl
+)
