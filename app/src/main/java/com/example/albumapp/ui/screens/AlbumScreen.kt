@@ -1,13 +1,13 @@
 package com.example.albumapp.ui.screens
 
 
+import android.content.res.Configuration
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -21,16 +21,14 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -80,21 +78,39 @@ fun AlbumScreenLayout(
     contentPadding: PaddingValues,
     modifier: Modifier
 ) {
-    Column() {
-        Column(
-            modifier = Modifier
-                .weight(1f)
-                .padding(top = 16.dp)
-        ) {
-            if (savedItems.isEmpty()) {
-                Text(
-                    text = stringResource(R.string.no_saved_photos),
-                    textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.titleLarge,
-                    modifier = Modifier
-                        .padding(contentPadding)
-                )
-            } else {
+    val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
+
+    if (!isLandscape) {
+        Column() {
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(top = 16.dp)
+            ) {
+                if (savedItems.isEmpty()) {
+                    Text(
+                        text = stringResource(R.string.no_saved_photos),
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.titleLarge,
+                        modifier = Modifier
+                            .padding(contentPadding)
+                    )
+                } else {
+                    PhotosGridScreen(
+                        photos,
+                        delete = true,
+                        onShowButtonClicked = onShowButtonClicked,
+                        onSaveOrDeleteButtonClicked = onSaveButtonClicked,
+                        contentPadding = contentPadding,
+                        modifier = modifier
+                            .fillMaxWidth()
+                    )
+                }
+            }
+            Divider(color = Color.Black, thickness = 3.dp)
+            Column(
+                modifier = Modifier.weight(1.5f)
+            ) {
                 PhotosGridScreen(
                     photos,
                     delete = false,
@@ -106,19 +122,29 @@ fun AlbumScreenLayout(
                 )
             }
         }
-        Divider(color = Color.Black, thickness = 3.dp)
-        Column(
-            modifier = Modifier.weight(1.5f)
-        ) {
-            PhotosGridScreen(
-                photos,
-                delete = false,
-                onShowButtonClicked = onShowButtonClicked,
-                onSaveOrDeleteButtonClicked = onSaveButtonClicked,
-                contentPadding = contentPadding,
-                modifier = modifier
-                    .fillMaxWidth()
-            )
+    } else {
+        Row {
+            Box(modifier = modifier.weight(1f)) {
+                PhotosGridScreen(
+                    photos = savedItems,
+                    delete = false,
+                    onShowButtonClicked = onShowButtonClicked,
+                    onSaveOrDeleteButtonClicked = onSaveButtonClicked,
+                    contentPadding = contentPadding,
+                    modifier = modifier.fillMaxWidth()
+                )
+                Divider(color = Color.Black, thickness = 3.dp)
+            }
+            Box(modifier = modifier.weight(1f)) {
+                PhotosGridScreen(
+                    photos = photos,
+                    delete = false,
+                    onShowButtonClicked = onShowButtonClicked,
+                    onSaveOrDeleteButtonClicked = onSaveButtonClicked,
+                    contentPadding = contentPadding,
+                    modifier = modifier.fillMaxWidth()
+                )
+            }
         }
     }
 }
@@ -374,3 +400,144 @@ fun PhotosGridScreenPreview() {
     }
 }
 
+
+@Preview(widthDp = 640, heightDp = 360)
+@Composable
+fun AlbumScreenLayoutLandscapePreview() {
+    val photosMockData = List(15) { Photo(it, it,"title_test","url", "imgSrc") }
+    val itemsMockData = List(5) { Photo(it, it,"title_test1111","u1111rl", "i1111mgSrc") }
+    val modifier: Modifier = Modifier
+    val contentPadding: PaddingValues = PaddingValues(0.dp)
+
+    AlbumScreenLayout(
+        photos = photosMockData,
+        savedItems = itemsMockData,
+        onShowButtonClicked = {},
+        onSaveButtonClicked = {},
+        onDeleteButtonClicked = {},
+        contentPadding = contentPadding,
+        modifier = modifier.fillMaxWidth()
+    )
+}
+
+@Preview
+@Composable
+fun AlbumScreenLayoutPortraitPreview() {
+    val photosMockData = List(15) { Photo(it, it,"title_test","url", "imgSrc") }
+    val itemsMockData = List(5) { Photo(it, it,"title_test","url", "mgSrc") }
+    val modifier: Modifier = Modifier
+    val contentPadding: PaddingValues = PaddingValues(0.dp)
+
+    AlbumScreenLayout(
+        photos = photosMockData,
+        savedItems = itemsMockData,
+        onShowButtonClicked = {},
+        onSaveButtonClicked = {},
+        onDeleteButtonClicked = {},
+        contentPadding = contentPadding,
+        modifier = modifier.fillMaxWidth()
+    )
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//
+//
+//@Composable
+//fun AlbumScreenLayout(
+//    photos: List<Photo>,
+//    savedItems: List<Item>,
+//    onShowButtonClicked: (Photo) -> Unit,
+//    onSaveButtonClicked: (Photo) -> Unit,
+//    onDeleteButtonClicked: (Item) -> Unit,
+//    contentPadding: PaddingValues,
+//    modifier: Modifier = Modifier
+//) {
+//    val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
+//
+//    if (!isLandscape) {
+//        Column() {
+//            Column(
+//                modifier = Modifier
+//                    .weight(1f)
+//                    .padding(top = 16.dp)
+//            ) {
+//                if (savedItems.isEmpty()) {
+//                    Text(
+//                        text = stringResource(R.string.no_saved_photos),
+//                        textAlign = TextAlign.Center,
+//                        style = MaterialTheme.typography.titleLarge,
+//                        modifier = Modifier
+//                            .padding(contentPadding)
+//                    )
+//                } else {
+//                    SavedPhotosGridScreen(
+//                        itemList = savedItems,
+//                        delete = true,
+//                        onSaveOrDeleteButtonClicked = onDeleteButtonClicked,
+//                        contentPadding = contentPadding,
+//                        modifier = Modifier.padding(horizontal = 4.dp)
+//                    )
+//                }
+//            }
+//            Divider(color = Color.Black, thickness = 3.dp)
+//            Column(
+//                modifier = Modifier.weight(1.5f)
+//            ) {
+//                PhotosGridScreen(
+//                    photos,
+//                    delete = false,
+//                    onShowButtonClicked = onShowButtonClicked,
+//                    onSaveOrDeleteButtonClicked = onSaveButtonClicked,
+//                    contentPadding = contentPadding,
+//                    modifier = modifier
+//                        .fillMaxWidth()
+//                )
+//            }
+//        }
+//    } else {
+//        Row {
+//            Box(modifier = modifier.weight(1f)) {
+//                SavedPhotosGridScreen(
+//                    itemList = savedItems,
+//                    delete = true,
+//                    onSaveOrDeleteButtonClicked = onDeleteButtonClicked,
+//                    contentPadding = contentPadding,
+//                    modifier = Modifier.padding(horizontal = 4.dp)
+//                )
+//                Divider(color = Color.Black, thickness = 3.dp)
+//            }
+//            Box(modifier = modifier.weight(1f)) {
+//                PhotosGridScreen(
+//                    photos = photos,
+//                    delete = false,
+//                    onShowButtonClicked = onShowButtonClicked,
+//                    onSaveOrDeleteButtonClicked = onSaveButtonClicked,
+//                    contentPadding = contentPadding,
+//                    modifier = modifier.fillMaxWidth()
+//                )
+//            }
+//        }
+//    }
+//}
