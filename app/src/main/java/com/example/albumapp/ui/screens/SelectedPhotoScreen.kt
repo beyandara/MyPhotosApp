@@ -1,7 +1,9 @@
 package com.example.albumapp.ui.screens
 
+import android.content.res.Configuration
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -15,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -33,13 +36,27 @@ fun SelectedPhotoScreen(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp)
 ) {
-    Column(
-        modifier = modifier
-            .fillMaxSize(),
-        verticalArrangement = Arrangement.Center
-    ) {
-        SelectedPhotoCard(photo = photo)
-        SelectedPhotoDetails(photo = photo)
+    val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
+
+    if (!isLandscape) {
+        Column(
+            modifier = modifier
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.Center
+        ) {
+            SelectedPhotoCard(photo = photo)
+            SelectedPhotoDetails(photo = photo)
+        }
+    } else {
+        Row {
+            Box(modifier = modifier.weight(1f)) {
+                SelectedPhotoCard(photo = photo)
+            }
+            Box(modifier = modifier.weight(1f)) {
+                SelectedPhotoDetails(photo = photo)
+            }
+        }
+
     }
 }
 
@@ -76,7 +93,7 @@ fun SelectedPhotoDetails(photo: Photo, modifier: Modifier = Modifier) {
     ) {
         Column {
             Row(
-                modifier = Modifier.fillMaxWidth(),
+//                modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -93,6 +110,14 @@ fun SelectedPhotoDetails(photo: Photo, modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 fun SelectedPhotoScreenPreview() {
+    AlbumAppTheme {
+        val mockData =  Photo(1, 1,"title_test","url", "imgSrc")
+        SelectedPhotoScreen(mockData)
+    }
+}
+@Preview(showBackground = true, widthDp = 640, heightDp = 360)
+@Composable
+fun SelectedPhotoScreenLandscapePreview() {
     AlbumAppTheme {
         val mockData =  Photo(1, 1,"title_test","url", "imgSrc")
         SelectedPhotoScreen(mockData)
