@@ -103,11 +103,23 @@ fun SelectedPhotoDetails(photo: Photo, modifier: Modifier = Modifier) {
                 style = MaterialTheme.typography.titleLarge
             )
             Spacer(modifier = Modifier.height(8.dp))
-            Text(text = stringResource(R.string.id, photo.id))
+            Row(modifier = modifier) {
+                Text(text = stringResource(R.string.id))
+                Spacer(modifier = Modifier.weight(1f))
+                Text(text = photo.id.toString())
+            }
             Spacer(modifier = Modifier.height(4.dp))
-            Text(text = stringResource(R.string.title, photo.title))
+            Row(modifier = modifier) {
+                Text(text = stringResource(R.string.title))
+                Spacer(modifier = Modifier.weight(1f))
+                Text(text = photo.title.toString())
+            }
             Spacer(modifier = Modifier.height(4.dp))
-            Text(text = stringResource(R.string.album_id, photo.albumId))
+            Row(modifier = modifier) {
+                Text(text = stringResource(R.string.album_id, ))
+                Spacer(modifier = Modifier.weight(1f))
+                Text(text = photo.albumId.toString())
+            }
             Spacer(modifier = Modifier.height(4.dp))
             Text(text = stringResource(R.string.Album_title))
 
