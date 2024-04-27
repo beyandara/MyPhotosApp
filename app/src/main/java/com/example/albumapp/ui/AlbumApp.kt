@@ -38,7 +38,6 @@ import com.example.albumapp.ui.screens.AlbumScreen
 import com.example.albumapp.ui.screens.AlbumViewModel
 import com.example.albumapp.ui.screens.SelectedPhotoScreen
 
-//ITS WORKING!! ITS WORKING!!
 enum class AlbumScreens(@StringRes val title:Int) {
     Start(title = R.string.title),
     SelectedPhoto(title = R.string.Album_title)
@@ -57,7 +56,6 @@ fun AlbumTopAppBar(
         scrollBehavior = scrollBehavior,
         title = {
             Text(
-//                text = stringResource(R.string.app_name),
                 stringResource(currentScreen.title),
                 style = MaterialTheme.typography.headlineSmall,
             )
@@ -75,10 +73,10 @@ fun AlbumTopAppBar(
                 }
             } else {
                 Icon(
-                    painter = painterResource(R.drawable.artshopicon),   // TODO MÅ HA ET EGET IKON
+                    painter = painterResource(R.drawable.photoalbumicon),
                     contentDescription = null,
                     modifier = modifier
-                        .size(40.dp)
+                        .size(50.dp)
                         .padding(4.dp)
                 )
             }
