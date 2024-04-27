@@ -37,8 +37,8 @@ class AlbumViewModel(private val albumRepository: AlbumRepository) : ViewModel()
         private set
 
     // Mutable state for the list of saved items
-    private val _savedItems = MutableStateFlow<List<Item>>(emptyList())
-    val savedItems: StateFlow<List<Item>> get() = _savedItems
+    private val _savedItems = MutableStateFlow<List<Photo>>(emptyList())
+    val savedItems: StateFlow<List<Photo>> get() = _savedItems
 
 //    var uiState: UiState by mutableStateOf(uiState)
     /**
@@ -71,7 +71,7 @@ class AlbumViewModel(private val albumRepository: AlbumRepository) : ViewModel()
     }
 
     // Function to update the list of saved items
-    fun updateSavedItems(items: List<Item>) {
+    fun updateSavedItems(items: List<Photo>) {
         _savedItems.value = items
     }
 

@@ -1,14 +1,15 @@
 package com.example.albumapp.data
 
+import com.example.albumapp.model.Photo
 import kotlinx.coroutines.flow.Flow
 
-class OfflinePhotosRepository(private val itemDao: ItemDao) : ItemsRepository {
-    override fun getAllItemsStream(): Flow<List<Item>> = itemDao.getAllItems()
+class OfflinePhotosRepository(private val photoDao: PhotoDao) : ItemsRepository {
+    override fun getAllItemsStream(): Flow<List<Photo>> = photoDao.getAllItems()
 
-    override fun getItemStream(id: Int): Flow<Item?> = itemDao.getItem(id)
+    override fun getItemStream(id: Int): Flow<Photo?> = photoDao.getItem(id)
 
-    override suspend fun insertItem(item: Item) = itemDao.insert(item)
+    override suspend fun insertItem(item: Photo) = photoDao.insert(item)
 
-    override suspend fun deleteItem(item: Item) = itemDao.delete(item)
+    override suspend fun deleteItem(item: Photo) = photoDao.delete(item)
 
 }

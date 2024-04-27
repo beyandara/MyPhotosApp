@@ -39,22 +39,21 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.albumapp.R
-import com.example.albumapp.data.Item
 import com.example.albumapp.model.Photo
 import com.example.albumapp.ui.theme.AlbumAppTheme
 
 @Composable
 fun AlbumScreen(
     albumUiState: AlbumUiState,
-    savedItems: List<Item>,
+    savedItems: List<Photo>,
     onShowButtonClicked: (Photo) -> Unit,
     onSaveButtonClicked: (Photo) -> Unit,
-    onDeleteButtonClicked: (Item) -> Unit,
+    onDeleteButtonClicked: (Photo) -> Unit,
     retryAction: () -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
 ) {
-    val savedItemsState = remember { mutableStateOf(emptyList<Item>()) }
+    val savedItemsState = remember { mutableStateOf(emptyList<Photo>()) }
 
     when (albumUiState) {
         is AlbumUiState.Loading -> LoadingScreen(modifier = modifier.fillMaxSize())
@@ -74,10 +73,10 @@ fun AlbumScreen(
 @Composable
 fun AlbumScreenLayout(
     photos: List<Photo>,
-    savedItems: List<Item>,
+    savedItems: List<Photo>,
     onShowButtonClicked: (Photo) -> Unit,
     onSaveButtonClicked: (Photo) -> Unit,
-    onDeleteButtonClicked: (Item) -> Unit,
+    onDeleteButtonClicked: (Photo) -> Unit,
     contentPadding: PaddingValues,
     modifier: Modifier
 ) {
@@ -96,12 +95,14 @@ fun AlbumScreenLayout(
                         .padding(contentPadding)
                 )
             } else {
-                SavedPhotosGridScreen(
-                    itemList = savedItems,
-                    delete = true,
-                    onSaveOrDeleteButtonClicked = onDeleteButtonClicked,
+                PhotosGridScreen(
+                    photos,
+                    delete = false,
+                    onShowButtonClicked = onShowButtonClicked,
+                    onSaveOrDeleteButtonClicked = onSaveButtonClicked,
                     contentPadding = contentPadding,
-                    modifier = Modifier.padding(horizontal = 4.dp)
+                    modifier = modifier
+                        .fillMaxWidth()
                 )
             }
         }
@@ -195,9 +196,9 @@ fun PhotosGridScreen(
  */
 @Composable
 fun SavedPhotosGridScreen(
-    itemList: List<Item>,
+    itemList: List<Photo>,
     delete: Boolean,
-    onSaveOrDeleteButtonClicked: (Item) -> Unit,
+    onSaveOrDeleteButtonClicked: (Photo) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
 ) {
@@ -268,9 +269,9 @@ fun PhotoCard(
 
 @Composable
 fun ItemCard(
-    item: Item,
+    item: Photo,
     delete: Boolean,
-    onSaveOrDeleteButtonClicked: (Item) -> Unit,
+    onSaveOrDeleteButtonClicked: (Photo) -> Unit,
     modifier: Modifier = Modifier) {
     Card(
         modifier = modifier,
@@ -309,10 +310,6 @@ fun ItemCard(
     }
 }
 
-@Composable
-fun SavePhoto() {
-    //when click on save, the photo is saved in database and added to ItemList
-}
 @Composable
 fun ShowPhotoButton(
     onClick: () -> Unit,
