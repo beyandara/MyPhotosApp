@@ -125,14 +125,25 @@ fun AlbumScreenLayout(
     } else {
         Row {
             Box(modifier = modifier.weight(1f)) {
-                PhotosGridScreen(
-                    photos = savedItems,
-                    delete = false,
-                    onShowButtonClicked = onShowButtonClicked,
-                    onSaveOrDeleteButtonClicked = onSaveButtonClicked,
-                    contentPadding = contentPadding,
-                    modifier = modifier.fillMaxWidth()
-                )
+                if (savedItems.isEmpty()) {
+                    Text(
+                        text = stringResource(R.string.no_saved_photos),
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.titleLarge,
+                        modifier = Modifier
+                            .padding(contentPadding)
+                    )
+                } else {
+                    PhotosGridScreen(
+                        photos,
+                        delete = true,
+                        onShowButtonClicked = onShowButtonClicked,
+                        onSaveOrDeleteButtonClicked = onSaveButtonClicked,
+                        contentPadding = contentPadding,
+                        modifier = modifier
+                            .fillMaxWidth()
+                    )
+                }
                 Divider(color = Color.Black, thickness = 3.dp)
             }
             Box(modifier = modifier.weight(1f)) {

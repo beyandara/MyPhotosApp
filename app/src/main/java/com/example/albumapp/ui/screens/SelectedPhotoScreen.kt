@@ -43,8 +43,7 @@ fun SelectedPhotoScreen(
     if (!isLandscape) {
         Column(
             modifier = modifier
-                .fillMaxSize()
-                .padding(top = 90.dp),
+                .fillMaxSize(),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -54,8 +53,7 @@ fun SelectedPhotoScreen(
     } else {
         Row(
             modifier = modifier
-                .fillMaxSize()
-                .padding(top = 90.dp),
+                .fillMaxSize(),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.Top
         ) {
