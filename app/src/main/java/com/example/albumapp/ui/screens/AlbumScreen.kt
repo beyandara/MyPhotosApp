@@ -320,7 +320,7 @@ fun SavePhotoButton(
     Button(
         onClick = {
             onClick()
-            println("Saved Photos List size: ${savedPhotosList.size}")
+            println("Saved Photos  List size: ${savedPhotosList.size}")
             println("Saved photo id: ${photo.id}")},
         modifier = modifier
     ) {
