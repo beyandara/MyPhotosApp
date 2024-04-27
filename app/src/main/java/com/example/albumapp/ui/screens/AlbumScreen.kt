@@ -22,6 +22,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -51,11 +52,13 @@ fun AlbumScreen(
     contentPadding: PaddingValues = PaddingValues(0.dp),
     viewModel : AlbumViewModel = viewModel(factory = AlbumViewModel.Factory)
 ) {
+    val homeUiState by viewModel.homeUiState.collectAsState()
     when (albumUiState) {
         is AlbumUiState.Loading -> LoadingScreen(modifier = modifier.fillMaxSize())
         is AlbumUiState.Success -> AlbumScreenLayout(
             albumUiState.photos,
-            savedPhotosList = viewModel.homeUiState.collectAsState().value.savedPhotoList,
+            //savedPhotosList = viewModel.homeUiState.collectAsState().value.savedPhotoList,
+            savedPhotosList = homeUiState.savedPhotoList,
             onShowButtonClicked = onShowButtonClicked,
             onSaveButtonClicked = onSaveButtonClicked,
             onDeleteButtonClicked = onDeleteButtonClicked,
