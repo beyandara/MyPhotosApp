@@ -83,7 +83,7 @@ fun AlbumScreenLayout(
 ) {
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
     if (!isLandscape) {
-        Column() {
+        Column(modifier = Modifier.padding(top = 8.dp)) {
             Box(modifier = modifier.weight(1f)) {
 
                 EvaluateSavedPhotosList(
