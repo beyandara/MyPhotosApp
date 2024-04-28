@@ -5,7 +5,6 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -35,7 +34,6 @@ import com.example.albumapp.ui.theme.AlbumAppTheme
 fun SelectedPhotoScreen(
     photo: Photo,
     modifier: Modifier = Modifier,
-    contentPadding: PaddingValues = PaddingValues(0.dp)
 ) {
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
 
@@ -143,48 +141,8 @@ fun SelectedPhotoDetails(photo: Photo, modifier: Modifier = Modifier) {
 //                        modifier = Modifier.padding(start = 8.dp)
 //                    )
                 }
-
-
             }
         }
-
-
-
-//        Column(modifier = modifier.padding(10.dp)) {
-//
-//            Text(text = stringResource(R.string.photo_details),
-//                style = MaterialTheme.typography.titleLarge
-//            )
-//            Spacer(modifier = Modifier.height(8.dp))
-//            Row(modifier = modifier) {
-//                Text(
-//                    text = stringResource(R.string.id),
-//                    style = MaterialTheme.typography.titleMedium)
-//                Spacer(modifier = Modifier.weight(1f))
-//                Text(text = photo.id.toString())
-//            }
-//            Spacer(modifier = Modifier.height(4.dp))
-//            Row(modifier = modifier) {
-//                Text(
-//                    text = stringResource(R.string.title),
-//                    style = MaterialTheme.typography.titleMedium)
-//                Spacer(modifier = Modifier.weight(1f))
-//                Text(text = photo.title.toString())
-//            }
-//            Spacer(modifier = Modifier.height(4.dp))
-//            Row(modifier = modifier) {
-//                Text(
-//                    text = stringResource(R.string.album_id, ),
-//                    style = MaterialTheme.typography.titleMedium)
-//                Spacer(modifier = Modifier.weight(1f))
-//                Text(text = photo.albumId.toString())
-//            }
-//            Spacer(modifier = Modifier.height(4.dp))
-//            Text(
-//                text = stringResource(R.string.Album_title),
-//                style = MaterialTheme.typography.titleMedium)
-//
-//        }
     }
 }
 @Preview(showBackground = true)

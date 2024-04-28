@@ -239,12 +239,8 @@ fun PhotosGridScreen(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
 ) {
-//    LazyColumn(
-//        modifier = modifier.padding(horizontal = 4.dp),
-//        contentPadding = contentPadding,
-//    )
     LazyVerticalGrid(
-        columns = GridCells.Fixed(1), // Angi antall kolonner her
+        columns = GridCells.Fixed(1),
         modifier = modifier.padding(horizontal = 4.dp),
         contentPadding = contentPadding,
     )
@@ -264,7 +260,6 @@ fun PhotosGridScreen(
                 modifier = modifier
                     .padding(2.dp)
                     .fillMaxWidth()
-//                    .aspectRatio(1.5f)
             )
         }
     }
@@ -343,60 +338,6 @@ fun PhotoCard(
     }
 }
 
-//
-//@Composable
-//fun ShowPhotoButton(
-//    photo: Photo,
-//
-//    onClick: () -> Unit,
-//    modifier: Modifier = Modifier
-//) {
-//    Button(
-//        onClick = {onClick()
-//            println("Saved photo id: ${photo.id}")},
-//
-//        modifier = modifier
-//    ) {
-//        Text(stringResource(R.string.show))
-//    }
-//}
-
-//@Composable
-//fun DeletePhotoButton(
-//    photo: Photo,
-//
-//    savedPhotosList: List<Photo>,
-//
-//    onClick: () -> Unit,
-//    modifier: Modifier = Modifier
-//) {
-//    Button(
-//        onClick = {onClick()
-//        println("Saved Photos List size: ${savedPhotosList.size}")
-//        println("deleted photo id: ${photo.id}")},
-//        modifier = modifier
-//    ) {
-//        Text(stringResource(R.string.delete))
-//    }
-//}
-//
-//@Composable
-//fun SavePhotoButton(
-//    photo: Photo,
-//    savedPhotosList: List<Photo>,
-//    onClick: () -> Unit,
-//    modifier: Modifier = Modifier
-//) {
-//    Button(
-//        onClick = {
-//            onClick()
-//            println("Saved Photos  List size: ${savedPhotosList.size}")
-//            println("Saved photo id: ${photo.id}")},
-//        modifier = modifier
-//    ) {
-//        Text(stringResource(R.string.save))
-//    }
-//}
 @Preview(showBackground = true)
 @Composable
 fun LoadingScreenPreview() {

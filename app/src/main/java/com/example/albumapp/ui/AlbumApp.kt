@@ -17,12 +17,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -49,11 +47,9 @@ fun AlbumTopAppBar(
     currentScreen: AlbumScreens,
     canNavigateBack: Boolean,
     navigateUp: () -> Unit,
-    scrollBehavior: TopAppBarScrollBehavior,
     modifier: Modifier = Modifier
 ) {
     CenterAlignedTopAppBar(
-        scrollBehavior = scrollBehavior,
         title = {
             Text(
                 stringResource(currentScreen.title),
@@ -85,7 +81,6 @@ fun AlbumTopAppBar(
 }
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AlbumApp(
     navController: NavHostController = rememberNavController()
@@ -95,23 +90,20 @@ fun AlbumApp(
         backStackEntry?.destination?.route?: AlbumScreens.Start.name
 
     )
-    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val viewModel: AlbumViewModel =
         viewModel(factory = AlbumViewModel.Factory)
     val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
-        modifier = Modifier
-            .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             AlbumTopAppBar(
                 currentScreen = currentScreen,
                 canNavigateBack = navController.previousBackStackEntry != null,
                 navigateUp = { navController.navigateUp()},
-                scrollBehavior = scrollBehavior) }
+            )}
     ) {
         Surface(
-            modifier = Modifier.fillMaxSize().padding(top=90.dp)
+            modifier = Modifier.fillMaxSize().padding(top=110.dp)
         ) {
             NavHost(
                 navController = navController,
@@ -120,6 +112,7 @@ fun AlbumApp(
                     .fillMaxSize()
                     .padding(2.dp)
             ) {
+                
                 composable(route = AlbumScreens.Start.name) {
                     AlbumScreen(
                         albumUiState = viewModel.albumUiState,
@@ -141,8 +134,6 @@ fun AlbumApp(
                         viewModel = viewModel
                     )
                 }
-
-                /** VIEW SELECTED PHOTO */
 
                 composable(route = AlbumScreens.SelectedPhoto.name) {
                     val selectedPhoto = viewModel.selectedPhoto
