@@ -60,7 +60,6 @@ fun AlbumScreen(
         is AlbumUiState.Loading -> LoadingScreen(modifier = modifier.fillMaxSize())
         is AlbumUiState.Success -> AlbumScreenLayout(
             albumUiState.photos,
-            //savedPhotosList = viewModel.homeUiState.collectAsState().value.savedPhotoList,
             savedPhotosList = homeUiState.savedPhotoList,
             onShowButtonClicked = onShowButtonClicked,
             onSaveButtonClicked = onSaveButtonClicked,
@@ -149,38 +148,6 @@ fun AlbumScreenLayout(
         }
     }
 }
-
-//@Composable
-//fun AlbumScreenContent(
-//    photos: List<Photo>,
-//    savedPhotosList: List<Photo>,
-//    onShowButtonClicked: (Photo) -> Unit,
-//    onSaveButtonClicked: (Photo) -> Unit,
-//    onDeleteButtonClicked: (Photo) -> Unit,
-//    contentPadding: PaddingValues,
-//    modifier: Modifier
-//) {
-//    Box(modifier = modifier.weight(1f)) {
-//        EvaluateSavedPhotosList(
-//            savedPhotosList = savedPhotosList,
-//            onShowButtonClicked = onShowButtonClicked,
-//            onDeleteButtonClicked = onDeleteButtonClicked,
-//            contentPadding = contentPadding,
-//            modifier = modifier
-//        )
-//    }
-//    Divider(color = Color.Black, thickness = 3.dp)
-//    Box(modifier = modifier.weight(1f)) {
-//        PhotosGridScreen(
-//            photos = photos,
-//            delete = false,
-//            onShowButtonClicked = onShowButtonClicked,
-//            onSaveOrDeleteButtonClicked = onSaveButtonClicked,
-//            contentPadding = contentPadding,
-//            modifier = modifier.fillMaxWidth()
-//        )
-//    }
-//}
 
 @Composable
 fun EvaluateSavedPhotosList(
@@ -429,106 +396,3 @@ fun AlbumScreenLayoutPortraitPreview() {
         modifier = modifier.fillMaxWidth()
     )
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//
-//
-//@Composable
-//fun AlbumScreenLayout(
-//    photos: List<Photo>,
-//    savedItems: List<Item>,
-//    onShowButtonClicked: (Photo) -> Unit,
-//    onSaveButtonClicked: (Photo) -> Unit,
-//    onDeleteButtonClicked: (Item) -> Unit,
-//    contentPadding: PaddingValues,
-//    modifier: Modifier = Modifier
-//) {
-//    val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
-//
-//    if (!isLandscape) {
-//        Column() {
-//            Column(
-//                modifier = Modifier
-//                    .weight(1f)
-//                    .padding(top = 16.dp)
-//            ) {
-//                if (savedItems.isEmpty()) {
-//                    Text(
-//                        text = stringResource(R.string.no_saved_photos),
-//                        textAlign = TextAlign.Center,
-//                        style = MaterialTheme.typography.titleLarge,
-//                        modifier = Modifier
-//                            .padding(contentPadding)
-//                    )
-//                } else {
-//                    SavedPhotosGridScreen(
-//                        itemList = savedItems,
-//                        delete = true,
-//                        onSaveOrDeleteButtonClicked = onDeleteButtonClicked,
-//                        contentPadding = contentPadding,
-//                        modifier = Modifier.padding(horizontal = 4.dp)
-//                    )
-//                }
-//            }
-//            Divider(color = Color.Black, thickness = 3.dp)
-//            Column(
-//                modifier = Modifier.weight(1.5f)
-//            ) {
-//                PhotosGridScreen(
-//                    photos,
-//                    delete = false,
-//                    onShowButtonClicked = onShowButtonClicked,
-//                    onSaveOrDeleteButtonClicked = onSaveButtonClicked,
-//                    contentPadding = contentPadding,
-//                    modifier = modifier
-//                        .fillMaxWidth()
-//                )
-//            }
-//        }
-//    } else {
-//        Row {
-//            Box(modifier = modifier.weight(1f)) {
-//                SavedPhotosGridScreen(
-//                    itemList = savedItems,
-//                    delete = true,
-//                    onSaveOrDeleteButtonClicked = onDeleteButtonClicked,
-//                    contentPadding = contentPadding,
-//                    modifier = Modifier.padding(horizontal = 4.dp)
-//                )
-//                Divider(color = Color.Black, thickness = 3.dp)
-//            }
-//            Box(modifier = modifier.weight(1f)) {
-//                PhotosGridScreen(
-//                    photos = photos,
-//                    delete = false,
-//                    onShowButtonClicked = onShowButtonClicked,
-//                    onSaveOrDeleteButtonClicked = onSaveButtonClicked,
-//                    contentPadding = contentPadding,
-//                    modifier = modifier.fillMaxWidth()
-//                )
-//            }
-//        }
-//    }
-//}

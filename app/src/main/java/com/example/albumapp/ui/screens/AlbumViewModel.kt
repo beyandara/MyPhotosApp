@@ -47,7 +47,6 @@ class AlbumViewModel( val albumRepository: AlbumRepository, private val itemsRep
                 initialValue = HomeUiState()
             )
 
-//    val albums : List<Album> = albumRepository.getAlbums()
 
     /**
      * Call getAlbum on init so we can display status immediately.
@@ -65,8 +64,6 @@ class AlbumViewModel( val albumRepository: AlbumRepository, private val itemsRep
 
         fun setSelectedPhoto(photo : Photo) { // TODO fiks navn til setSelectedPhotoAlbum
             _selectedPhoto = photo
-//            val albumList = albumRepository.getAlbums()
-//            _selectedAlbum = findAlbumForPhoto(_selectedPhoto!!, albumList)
         }
 
     val selectedAlbum: Album
@@ -93,7 +90,7 @@ class AlbumViewModel( val albumRepository: AlbumRepository, private val itemsRep
         }
     }
     /**
-     * Inserts a [Photo] in the Room database
+     * Insert/Delete a [Photo] in the Room database
      */
     suspend fun saveItem(selectedPhoto : Photo) {
         itemsRepository.insertItem(selectedPhoto)
@@ -118,45 +115,4 @@ class AlbumViewModel( val albumRepository: AlbumRepository, private val itemsRep
     }
 }
 
-data class PhotoUiState(
-    val photoDetails: PhotoDetails = PhotoDetails()
-)
 data class HomeUiState(val savedPhotoList: List<Photo> = listOf())
-
-data class PhotoDetails(
-    val albumId: Int = 0,
-    val id: Int = 0,
-    val title: String = "",
-    val imgSrc: String = "",
-    val thumbnailUrl: String = ""
-)
-
-
-/**
- * Extension function to convert [PhotoUiState] to [Photo].
- */
-fun PhotoDetails.toPhoto(): Photo = Photo(
-    albumId = albumId,
-    id = id,
-    title = title,
-    imgSrc = imgSrc,
-    thumbnailUrl = thumbnailUrl
-)
-
-/**
- * Extension function to convert [Photo] to [PhotoUiState]
- */
-fun Photo.toPhotoUiState(): PhotoUiState = PhotoUiState(
-    photoDetails = this.toPhotoDetails()
-)
-
-/**
- * Extension function to convert [Photo] to [PhotoDetails]
- */
-fun Photo.toPhotoDetails(): PhotoDetails = PhotoDetails(
-    albumId = albumId,
-    id = id,
-    title = title,
-    imgSrc = imgSrc,
-    thumbnailUrl = thumbnailUrl
-)

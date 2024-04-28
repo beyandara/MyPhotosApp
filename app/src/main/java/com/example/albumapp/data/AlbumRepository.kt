@@ -30,7 +30,7 @@ class NetworkAlbumRepository(
 }
 
 /**
- * Repository that provides insert, update, delete, and retrieve of [Photo] from a given data source.
+ * Repository that provides insert, delete, and retrieve of [Photo] from a given data source.
  */
 interface ItemsRepository {
 

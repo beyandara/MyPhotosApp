@@ -9,7 +9,7 @@ import com.example.albumapp.model.Photo
 import kotlinx.coroutines.flow.Flow
 
 /**
- * Database access object to access the Inventory database
+ * Database access object to access the item database
  */
 @Dao
 interface PhotoDao {
