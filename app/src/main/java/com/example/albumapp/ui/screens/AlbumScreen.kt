@@ -86,6 +86,7 @@ fun AlbumScreenLayout(
     if (!isLandscape) {
         Column() {
             Box(modifier = modifier.weight(1f)) {
+
                 EvaluateSavedPhotosList(
                     savedPhotosList = savedPhotosList,
                     onShowButtonClicked = onShowButtonClicked,
@@ -95,6 +96,13 @@ fun AlbumScreenLayout(
                 )
             }
             Divider(color = Color.Black, thickness = 3.dp)
+            Box(
+                modifier = modifier.padding(start = 120.dp)
+            ) {
+                Text(
+                    text = stringResource(R.string.available_photos),
+                    style = MaterialTheme.typography.labelMedium)
+            }
             Box(modifier = modifier.weight(1f)) {
                 PhotosGridScreen(
                     photos = photos,
@@ -109,26 +117,34 @@ fun AlbumScreenLayout(
         }
     } else {
         Row {
-            Box(modifier = modifier.weight(1f)) {
-                EvaluateSavedPhotosList(
-                    savedPhotosList = savedPhotosList,
-                    onShowButtonClicked = onShowButtonClicked,
-                    onDeleteButtonClicked = onDeleteButtonClicked,
-                    contentPadding = contentPadding,
-                    modifier = modifier
-                )
-                Divider(color = Color.Black, thickness = 3.dp)
 
+            Box(modifier = modifier.weight(1f)) {
+                Column {
+                    EvaluateSavedPhotosList(
+                        savedPhotosList = savedPhotosList,
+                        onShowButtonClicked = onShowButtonClicked,
+                        onDeleteButtonClicked = onDeleteButtonClicked,
+                        contentPadding = contentPadding,
+                        modifier = modifier
+                    )
+                    Divider(color = Color.Black, thickness = 3.dp)
+                }
             }
             Box(modifier = modifier.weight(1f)) {
-                PhotosGridScreen(
-                    photos = photos,
-                    delete = false,
-                    onShowButtonClicked = onShowButtonClicked,
-                    onSaveOrDeleteButtonClicked = onSaveButtonClicked,
-                    contentPadding = contentPadding,
-                    modifier = modifier.fillMaxWidth()
-                )
+                Column {
+                    Text(
+                        text = stringResource(R.string.available_photos),
+                        style = MaterialTheme.typography.labelMedium
+                    )
+                    PhotosGridScreen(
+                        photos = photos,
+                        delete = false,
+                        onShowButtonClicked = onShowButtonClicked,
+                        onSaveOrDeleteButtonClicked = onSaveButtonClicked,
+                        contentPadding = contentPadding,
+                        modifier = modifier.fillMaxWidth()
+                    )
+                }
             }
         }
     }
@@ -182,15 +198,23 @@ fun EvaluateSavedPhotosList(
                 .padding(contentPadding)
         )
     } else {
-        PhotosGridScreen(
-            photos = savedPhotosList,
-            delete = true,
-            onShowButtonClicked = onShowButtonClicked,
-            onSaveOrDeleteButtonClicked = onDeleteButtonClicked,
-            contentPadding = contentPadding,
-            modifier = modifier
-                .fillMaxWidth()
-        )
+        Column(
+        ) {
+            Text(
+                text = stringResource(R.string.my_saved_photos),
+                style = MaterialTheme.typography.labelMedium,
+                modifier = modifier.padding(start=125.dp)
+            )
+            PhotosGridScreen(
+                photos = savedPhotosList,
+                delete = true,
+                onShowButtonClicked = onShowButtonClicked,
+                onSaveOrDeleteButtonClicked = onDeleteButtonClicked,
+                contentPadding = contentPadding,
+                modifier = modifier
+                    .fillMaxWidth()
+            )
+        }
     }
 
 }
@@ -309,7 +333,9 @@ fun PhotoCard(
                         )
                     }
                     Row(
-                        modifier = Modifier.fillMaxWidth().padding(bottom = 3.dp, end = 2.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 3.dp, end = 2.dp),
                         horizontalArrangement = Arrangement.End
                     ) {
                         Button(onClick = { onShowButtonClicked(photo) }) {

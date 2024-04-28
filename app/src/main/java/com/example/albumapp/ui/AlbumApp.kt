@@ -103,7 +103,7 @@ fun AlbumApp(
             )}
     ) {
         Surface(
-            modifier = Modifier.fillMaxSize().padding(top=110.dp)
+            modifier = Modifier.fillMaxSize().padding(top=100.dp)
         ) {
             NavHost(
                 navController = navController,

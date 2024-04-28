@@ -11,6 +11,8 @@
     <string name="loading">Loading</string>
     <string name="chosen_photo">Chosen photo</string>
     <string name="my_pictures">My pictures</string>
+    <string name="available_photos">Available photos</string>
+    <string name="my_saved_photos">My saved photos</string>
 
     <string name="id">Id: </string>
     <string name="title">Title:  </string>
