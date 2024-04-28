@@ -7,11 +7,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -97,33 +96,95 @@ fun SelectedPhotoDetails(photo: Photo, modifier: Modifier = Modifier) {
             .fillMaxSize(),
         border = BorderStroke(2.dp, Color.Black)
     ) {
-        Column(modifier = modifier.padding(10.dp)) {
+        Row(modifier = modifier.padding(10.dp)) {
+            Column {
+                Text(
+                    text = stringResource(R.string.photo_details),
+                    style = MaterialTheme.typography.titleLarge
+                )
+                Row(modifier = modifier.padding(5.dp)) {
+                    Text(
+                        text = stringResource(R.string.id),
+                        style = MaterialTheme.typography.titleMedium,
+                        modifier = Modifier.width(100.dp)
+                    )
 
-            Text(text = stringResource(R.string.photo_details),
-                style = MaterialTheme.typography.titleLarge
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Row(modifier = modifier) {
-                Text(text = stringResource(R.string.id))
-                Spacer(modifier = Modifier.weight(1f))
-                Text(text = photo.id.toString())
-            }
-            Spacer(modifier = Modifier.height(4.dp))
-            Row(modifier = modifier) {
-                Text(text = stringResource(R.string.title))
-                Spacer(modifier = Modifier.weight(1f))
-                Text(text = photo.title.toString())
-            }
-            Spacer(modifier = Modifier.height(4.dp))
-            Row(modifier = modifier) {
-                Text(text = stringResource(R.string.album_id, ))
-                Spacer(modifier = Modifier.weight(1f))
-                Text(text = photo.albumId.toString())
-            }
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(text = stringResource(R.string.Album_title))
+                    Text(
+                        text = photo.id.toString(),
+                        modifier = Modifier.padding(start = 8.dp))
+                }
+                Row(modifier = modifier.padding(5.dp)) {
+                    Text(
+                        text = stringResource(R.string.title),
+                        style = MaterialTheme.typography.titleMedium,
+                        modifier = Modifier.width(100.dp)
+                    )
+                    Text(
+                        text = photo.title.toString(),
+                        modifier = Modifier.padding(start = 8.dp))
+                }
+                Row(modifier = modifier.padding(5.dp)) {
+                    Text(
+                        text = stringResource(R.string.album_id,),
+                        style = MaterialTheme.typography.titleMedium,
+                        modifier = Modifier.width(100.dp))
+                    Text(
+                        text = photo.albumId.toString(),
+                        modifier = Modifier.padding(start = 8.dp))
+                }
+                Row(modifier = modifier.padding(5.dp)) {
+                    Text(
+                        text = stringResource(R.string.Album_title),
+                        style = MaterialTheme.typography.titleMedium,
+                        modifier = Modifier.width(100.dp)
+                    )
+//                    Text(
+//                        text = Album.title.toString(),
+//                        modifier = Modifier.padding(start = 8.dp)
+//                    )
+                }
 
+
+            }
         }
+
+
+
+//        Column(modifier = modifier.padding(10.dp)) {
+//
+//            Text(text = stringResource(R.string.photo_details),
+//                style = MaterialTheme.typography.titleLarge
+//            )
+//            Spacer(modifier = Modifier.height(8.dp))
+//            Row(modifier = modifier) {
+//                Text(
+//                    text = stringResource(R.string.id),
+//                    style = MaterialTheme.typography.titleMedium)
+//                Spacer(modifier = Modifier.weight(1f))
+//                Text(text = photo.id.toString())
+//            }
+//            Spacer(modifier = Modifier.height(4.dp))
+//            Row(modifier = modifier) {
+//                Text(
+//                    text = stringResource(R.string.title),
+//                    style = MaterialTheme.typography.titleMedium)
+//                Spacer(modifier = Modifier.weight(1f))
+//                Text(text = photo.title.toString())
+//            }
+//            Spacer(modifier = Modifier.height(4.dp))
+//            Row(modifier = modifier) {
+//                Text(
+//                    text = stringResource(R.string.album_id, ),
+//                    style = MaterialTheme.typography.titleMedium)
+//                Spacer(modifier = Modifier.weight(1f))
+//                Text(text = photo.albumId.toString())
+//            }
+//            Spacer(modifier = Modifier.height(4.dp))
+//            Text(
+//                text = stringResource(R.string.Album_title),
+//                style = MaterialTheme.typography.titleMedium)
+//
+//        }
     }
 }
 @Preview(showBackground = true)

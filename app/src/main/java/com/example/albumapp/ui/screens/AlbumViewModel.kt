@@ -35,11 +35,6 @@ class AlbumViewModel(private val albumRepository: AlbumRepository, private val i
         private set
 
     /**
-     * Holds current item ui state
-     */
-    var photoUiState by mutableStateOf(PhotoUiState())
-        private set
-    /**
      * Holds home ui state. The list of photos are retrieved from [ItemsRepository] and mapped to
      * [HomeUiState]
      */
@@ -67,10 +62,6 @@ class AlbumViewModel(private val albumRepository: AlbumRepository, private val i
             _selectedPhoto = photo
         }
 
-
-
-
-
     fun getAlbum() {
         viewModelScope.launch {
             albumUiState = AlbumUiState.Loading
@@ -88,9 +79,6 @@ class AlbumViewModel(private val albumRepository: AlbumRepository, private val i
      */
     suspend fun saveItem(selectedPhoto : Photo) {
         itemsRepository.insertItem(selectedPhoto)
-//        fun saveSelectedPhoto(photo : Photo) {
-//            val photoToSave = photoUiState.photoDetails.toPhoto()
-//            itemsRepository.insertItem(photoToSave)
     }
 
     suspend fun deleteItem(selectedPhoto : Photo) {

@@ -9,13 +9,14 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -84,36 +85,17 @@ fun AlbumScreenLayout(
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
     if (!isLandscape) {
         Column() {
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(top = 16.dp)
-            ) {
-                //Spacer(modifier = Modifier.size(8.dp))
-                if (savedPhotosList.isEmpty()) {
-                    Text(
-                        text = stringResource(R.string.no_saved_photos),
-                        textAlign = TextAlign.Center,
-                        style = MaterialTheme.typography.titleLarge,
-                        modifier = Modifier
-                            .padding(contentPadding)
-                    )
-                } else {
-                    PhotosGridScreen(
-                        photos = savedPhotosList,
-                        delete = true,
-                        onShowButtonClicked = onShowButtonClicked,
-                        onSaveOrDeleteButtonClicked = onDeleteButtonClicked,
-                        contentPadding = contentPadding,
-                        modifier = modifier
-                            .fillMaxWidth()
-                    )
-                }
+            Box(modifier = modifier.weight(1f)) {
+                EvaluateSavedPhotosList(
+                    savedPhotosList = savedPhotosList,
+                    onShowButtonClicked = onShowButtonClicked,
+                    onDeleteButtonClicked = onDeleteButtonClicked,
+                    contentPadding = contentPadding,
+                    modifier = modifier
+                )
             }
             Divider(color = Color.Black, thickness = 3.dp)
-            Column(
-                modifier = Modifier.weight(1.5f)
-            ) {
+            Box(modifier = modifier.weight(1f)) {
                 PhotosGridScreen(
                     photos = photos,
                     delete = false,
@@ -128,26 +110,15 @@ fun AlbumScreenLayout(
     } else {
         Row {
             Box(modifier = modifier.weight(1f)) {
-                if (savedPhotosList.isEmpty()) {
-                    Text(
-                        text = stringResource(R.string.no_saved_photos),
-                        textAlign = TextAlign.Center,
-                        style = MaterialTheme.typography.titleLarge,
-                        modifier = Modifier
-                            .padding(contentPadding)
-                    )
-                } else {
-                    PhotosGridScreen(
-                        photos = savedPhotosList,
-                        delete = true,
-                        onShowButtonClicked = onShowButtonClicked,
-                        onSaveOrDeleteButtonClicked = onDeleteButtonClicked,
-                        contentPadding = contentPadding,
-                        modifier = modifier
-                            .fillMaxWidth()
-                    )
-                }
+                EvaluateSavedPhotosList(
+                    savedPhotosList = savedPhotosList,
+                    onShowButtonClicked = onShowButtonClicked,
+                    onDeleteButtonClicked = onDeleteButtonClicked,
+                    contentPadding = contentPadding,
+                    modifier = modifier
+                )
                 Divider(color = Color.Black, thickness = 3.dp)
+
             }
             Box(modifier = modifier.weight(1f)) {
                 PhotosGridScreen(
@@ -161,6 +132,67 @@ fun AlbumScreenLayout(
             }
         }
     }
+}
+
+//@Composable
+//fun AlbumScreenContent(
+//    photos: List<Photo>,
+//    savedPhotosList: List<Photo>,
+//    onShowButtonClicked: (Photo) -> Unit,
+//    onSaveButtonClicked: (Photo) -> Unit,
+//    onDeleteButtonClicked: (Photo) -> Unit,
+//    contentPadding: PaddingValues,
+//    modifier: Modifier
+//) {
+//    Box(modifier = modifier.weight(1f)) {
+//        EvaluateSavedPhotosList(
+//            savedPhotosList = savedPhotosList,
+//            onShowButtonClicked = onShowButtonClicked,
+//            onDeleteButtonClicked = onDeleteButtonClicked,
+//            contentPadding = contentPadding,
+//            modifier = modifier
+//        )
+//    }
+//    Divider(color = Color.Black, thickness = 3.dp)
+//    Box(modifier = modifier.weight(1f)) {
+//        PhotosGridScreen(
+//            photos = photos,
+//            delete = false,
+//            onShowButtonClicked = onShowButtonClicked,
+//            onSaveOrDeleteButtonClicked = onSaveButtonClicked,
+//            contentPadding = contentPadding,
+//            modifier = modifier.fillMaxWidth()
+//        )
+//    }
+//}
+
+@Composable
+fun EvaluateSavedPhotosList(
+    savedPhotosList : List<Photo>,
+    onShowButtonClicked: (Photo) -> Unit,
+    onDeleteButtonClicked: (Photo) -> Unit,
+    contentPadding: PaddingValues,
+    modifier: Modifier) {
+    if (savedPhotosList.isEmpty()) {
+        Text(
+            text = stringResource(R.string.no_saved_photos),
+            textAlign = TextAlign.Center,
+            style = MaterialTheme.typography.titleLarge,
+            modifier = Modifier
+                .padding(contentPadding)
+        )
+    } else {
+        PhotosGridScreen(
+            photos = savedPhotosList,
+            delete = true,
+            onShowButtonClicked = onShowButtonClicked,
+            onSaveOrDeleteButtonClicked = onDeleteButtonClicked,
+            contentPadding = contentPadding,
+            modifier = modifier
+                .fillMaxWidth()
+        )
+    }
+
 }
 
 /**
@@ -207,10 +239,16 @@ fun PhotosGridScreen(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
 ) {
-    LazyColumn(
+//    LazyColumn(
+//        modifier = modifier.padding(horizontal = 4.dp),
+//        contentPadding = contentPadding,
+//    )
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(1), // Angi antall kolonner her
         modifier = modifier.padding(horizontal = 4.dp),
         contentPadding = contentPadding,
-    ) {
+    )
+    {
         items(
             items = photos,
             key = { photo ->
@@ -224,7 +262,7 @@ fun PhotosGridScreen(
                 onShowButtonClicked = onShowButtonClicked,
                 onSaveOrDeleteButtonClicked = onSaveOrDeleteButtonClicked,
                 modifier = modifier
-                    .padding(4.dp)
+                    .padding(2.dp)
                     .fillMaxWidth()
 //                    .aspectRatio(1.5f)
             )
@@ -240,110 +278,125 @@ fun PhotoCard(
     onShowButtonClicked: (Photo) -> Unit,
     onSaveOrDeleteButtonClicked: (Photo) -> Unit,
     modifier: Modifier = Modifier) {
-    Card(
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
-        border = BorderStroke(1.dp, Color.Black),
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(8.dp),
-        shape = MaterialTheme.shapes.medium,
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+    Box(
+        modifier = modifier.heightIn(max = 60.dp)
     ) {
-        Row {
-            AsyncImage(
-                model = ImageRequest.Builder(context = LocalContext.current)
-                    .data(photo.thumbnailUrl)
-                    .crossfade(true)
-                    .build(),
-                error = painterResource(R.drawable.ic_broken_image),
-                placeholder = painterResource(R.drawable.loading_img),
-                contentDescription = "",
-                contentScale = ContentScale.FillWidth,
-            )
-            Column {
-                Row() {
+        Card(
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
+            border = BorderStroke(1.dp, Color.Black),
+            modifier = modifier
+                .fillMaxWidth(),
+            shape = MaterialTheme.shapes.medium,
+            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
 
-                    Text(
-                        text = photo.title,
-                    )
-                }
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End
-                ) {
-                    ShowPhotoButton(photo = photo, onClick = { onShowButtonClicked(photo) })
-                    if (delete) {
-                        DeletePhotoButton(
-                            photo = photo,
-                            savedPhotosList = savedPhotosList,
-                            onClick = { onSaveOrDeleteButtonClicked(photo) })
-                    } else {
-                        SavePhotoButton(
-                            photo = photo,
-                            savedPhotosList = savedPhotosList,
-                            onClick = { onSaveOrDeleteButtonClicked(photo) })
+            ) {
+            Row {
+                AsyncImage(
+                    model = ImageRequest.Builder(context = LocalContext.current)
+                        .data(photo.thumbnailUrl)
+                        .crossfade(true)
+                        .build(),
+                    error = painterResource(R.drawable.ic_broken_image),
+                    placeholder = painterResource(R.drawable.loading_img),
+                    contentDescription = "",
+                    contentScale = ContentScale.FillWidth,
+                )
+                Column {
+                    Row(modifier = modifier.padding(top = 2.dp)) {
+                        Text(
+                            text = stringResource(R.string.title),
+                            style = MaterialTheme.typography.labelLarge
+                        )
+                        val title = photo.title.take(15)
+                        Text(
+                            text = if (photo.title.length > 15) "$title..." else photo.title,
+                            style = MaterialTheme.typography.bodyMedium
+                        )
                     }
+                    Row(
+                        modifier = Modifier.fillMaxWidth().padding(bottom = 3.dp, end = 2.dp),
+                        horizontalArrangement = Arrangement.End
+                    ) {
+                        Button(onClick = { onShowButtonClicked(photo) }) {
+                            Text(
+                                text = stringResource(R.string.show),
+                                style = MaterialTheme.typography.labelSmall) }
+                        if (delete) {
+                            Button(onClick = { onSaveOrDeleteButtonClicked(photo) }
+                            ) {
+                                Text(
+                                    text = stringResource(R.string.delete),
+                                    style = MaterialTheme.typography.labelSmall) }
+                        } else { Button(onClick = { onSaveOrDeleteButtonClicked(photo) }
+                            ) {
+                                Text(
+                                    text = stringResource(R.string.save),
+                                    style = MaterialTheme.typography.labelSmall
+                                )
+                            }
+                        }
 
+                    }
                 }
             }
         }
     }
 }
 
+//
+//@Composable
+//fun ShowPhotoButton(
+//    photo: Photo,
+//
+//    onClick: () -> Unit,
+//    modifier: Modifier = Modifier
+//) {
+//    Button(
+//        onClick = {onClick()
+//            println("Saved photo id: ${photo.id}")},
+//
+//        modifier = modifier
+//    ) {
+//        Text(stringResource(R.string.show))
+//    }
+//}
 
-@Composable
-fun ShowPhotoButton(
-    photo: Photo,
-
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Button(
-        onClick = {onClick()
-            println("Saved photo id: ${photo.id}")},
-
-        modifier = modifier
-    ) {
-        Text(stringResource(R.string.show))
-    }
-}
-
-@Composable
-fun DeletePhotoButton(
-    photo: Photo,
-
-    savedPhotosList: List<Photo>,
-
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Button(
-        onClick = {onClick()
-        println("Saved Photos List size: ${savedPhotosList.size}")
-        println("deleted photo id: ${photo.id}")},
-        modifier = modifier
-    ) {
-        Text(stringResource(R.string.delete))
-    }
-}
-
-@Composable
-fun SavePhotoButton(
-    photo: Photo,
-    savedPhotosList: List<Photo>,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Button(
-        onClick = {
-            onClick()
-            println("Saved Photos  List size: ${savedPhotosList.size}")
-            println("Saved photo id: ${photo.id}")},
-        modifier = modifier
-    ) {
-        Text(stringResource(R.string.save))
-    }
-}
+//@Composable
+//fun DeletePhotoButton(
+//    photo: Photo,
+//
+//    savedPhotosList: List<Photo>,
+//
+//    onClick: () -> Unit,
+//    modifier: Modifier = Modifier
+//) {
+//    Button(
+//        onClick = {onClick()
+//        println("Saved Photos List size: ${savedPhotosList.size}")
+//        println("deleted photo id: ${photo.id}")},
+//        modifier = modifier
+//    ) {
+//        Text(stringResource(R.string.delete))
+//    }
+//}
+//
+//@Composable
+//fun SavePhotoButton(
+//    photo: Photo,
+//    savedPhotosList: List<Photo>,
+//    onClick: () -> Unit,
+//    modifier: Modifier = Modifier
+//) {
+//    Button(
+//        onClick = {
+//            onClick()
+//            println("Saved Photos  List size: ${savedPhotosList.size}")
+//            println("Saved photo id: ${photo.id}")},
+//        modifier = modifier
+//    ) {
+//        Text(stringResource(R.string.save))
+//    }
+//}
 @Preview(showBackground = true)
 @Composable
 fun LoadingScreenPreview() {
