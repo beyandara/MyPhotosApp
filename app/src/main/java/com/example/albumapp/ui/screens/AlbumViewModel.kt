@@ -13,6 +13,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.albumapp.AlbumApplication
 import com.example.albumapp.data.AlbumRepository
 import com.example.albumapp.data.ItemsRepository
+import com.example.albumapp.model.Album
 import com.example.albumapp.model.Photo
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
