@@ -2,6 +2,7 @@ package com.example.albumapp.data
 
 
 
+import com.example.albumapp.model.Album
 import com.example.albumapp.model.Photo
 import com.example.albumapp.network.AlbumApiService
 import kotlinx.coroutines.flow.Flow
@@ -11,20 +12,21 @@ import kotlinx.coroutines.flow.Flow
  * Repository retrieves photo data from underlying data source.
  */
 interface AlbumRepository {
-    /** Fetches list of MarsPhoto from marsApi */
+    /** Fetches list of json photos */
     suspend fun getAlbum(): List<Photo>
-
+    suspend fun getAlbums(): List<Album>
 
 }
 
 /**
- * Network Implementation of Repository that fetch mars photos list from marsApi.
+ * Network Implementation of Repository that fetch json photos list.
  */
 class NetworkAlbumRepository(
     private val albumApiService: AlbumApiService
 ) : AlbumRepository {
-    /** Fetches list of MarsPhoto from marsApi*/
+    /** Fetches list of json */
     override suspend fun getAlbum(): List<Photo> = albumApiService.getPhotos()
+    override suspend fun getAlbums(): List<Album> = albumApiService.getAlbums()
 }
 
 /**

@@ -27,12 +27,14 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.albumapp.R
+import com.example.albumapp.model.Album
 import com.example.albumapp.model.Photo
 import com.example.albumapp.ui.theme.AlbumAppTheme
 
 @Composable
 fun SelectedPhotoScreen(
     photo: Photo,
+    album: Album,
     modifier: Modifier = Modifier,
 ) {
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
@@ -45,7 +47,7 @@ fun SelectedPhotoScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             SelectedPhotoCard(photo = photo)
-            SelectedPhotoDetails(photo = photo)
+            SelectedPhotoDetails(photo = photo, album=album)
         }
     } else {
         Row(
@@ -58,7 +60,7 @@ fun SelectedPhotoScreen(
                 SelectedPhotoCard(photo = photo)
             }
             Box(modifier = modifier.weight(1f)) {
-                SelectedPhotoDetails(photo = photo)
+                SelectedPhotoDetails(photo = photo, album=album)
             }
         }
 
@@ -88,7 +90,8 @@ fun SelectedPhotoCard(photo: Photo, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun SelectedPhotoDetails(photo: Photo, modifier: Modifier = Modifier) {
+fun SelectedPhotoDetails(photo: Photo, album: Album, modifier: Modifier = Modifier) {
+
     Card(
         modifier = modifier
             .fillMaxSize(),
@@ -118,7 +121,7 @@ fun SelectedPhotoDetails(photo: Photo, modifier: Modifier = Modifier) {
                         modifier = Modifier.width(100.dp)
                     )
                     Text(
-                        text = photo.title.toString(),
+                        text = photo.title,
                         modifier = Modifier.padding(start = 8.dp))
                 }
                 Row(modifier = modifier.padding(5.dp)) {
@@ -136,10 +139,10 @@ fun SelectedPhotoDetails(photo: Photo, modifier: Modifier = Modifier) {
                         style = MaterialTheme.typography.titleMedium,
                         modifier = Modifier.width(100.dp)
                     )
-//                    Text(
-//                        text = Album.title.toString(),
-//                        modifier = Modifier.padding(start = 8.dp)
-//                    )
+                    Text(
+                        text = album.title,
+                        modifier = Modifier.padding(start = 8.dp)
+                    )
                 }
             }
         }
@@ -150,7 +153,8 @@ fun SelectedPhotoDetails(photo: Photo, modifier: Modifier = Modifier) {
 fun SelectedPhotoScreenPreview() {
     AlbumAppTheme {
         val mockData =  Photo(1, 1,"title_test","url", "imgSrc")
-        SelectedPhotoScreen(mockData)
+        val mockAlbum = Album(1,1, "title")
+        SelectedPhotoScreen(mockData, mockAlbum)
     }
 }
 @Preview(showBackground = true, widthDp = 640, heightDp = 400)
@@ -158,6 +162,7 @@ fun SelectedPhotoScreenPreview() {
 fun SelectedPhotoScreenLandscapePreview() {
     AlbumAppTheme {
         val mockData =  Photo(1, 1,"title_test","url", "imgSrc")
-        SelectedPhotoScreen(mockData)
+        val mockAlbum = Album(1,1, "title")
+        SelectedPhotoScreen(mockData, mockAlbum)
     }
 }
