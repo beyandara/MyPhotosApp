@@ -37,8 +37,8 @@ import com.example.albumapp.ui.screens.SelectedPhotoScreen
 import kotlinx.coroutines.launch
 
 enum class AlbumScreens(@StringRes val title:Int) {
-    Start(title = R.string.title),
-    SelectedPhoto(title = R.string.Album_title)
+    Start(title = R.string.my_pictures),
+    SelectedPhoto(title = R.string.chosen_photo)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -112,7 +112,7 @@ fun AlbumApp(
                     .fillMaxSize()
                     .padding(2.dp)
             ) {
-                
+
                 composable(route = AlbumScreens.Start.name) {
                     AlbumScreen(
                         albumUiState = viewModel.albumUiState,

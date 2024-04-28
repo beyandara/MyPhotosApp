@@ -9,6 +9,8 @@
     <string name="save">Save</string>
     <string name="loading_failed">Failed to load</string>
     <string name="loading">Loading</string>
+    <string name="chosen_photo">Chosen photo</string>
+    <string name="my_pictures">My pictures</string>
 
     <string name="id">Id: </string>
     <string name="title">Title:  </string>
