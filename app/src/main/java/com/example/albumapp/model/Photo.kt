@@ -18,6 +18,7 @@ data class Photo(
     val thumbnailUrl: String
 )
 
+
 @Serializable
 data class Album(
     val userId: Int,

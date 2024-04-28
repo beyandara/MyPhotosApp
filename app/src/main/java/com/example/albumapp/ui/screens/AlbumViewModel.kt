@@ -25,12 +25,12 @@ import java.io.IOException
 
 
 sealed interface AlbumUiState {
-    data class Success(val photos: List<Photo>) : AlbumUiState
+    data class Success(val photos: List<Photo>, val album: List<Album>) : AlbumUiState
     object Error : AlbumUiState
     object Loading : AlbumUiState
 }
 
-class AlbumViewModel(private val albumRepository: AlbumRepository, private val itemsRepository: ItemsRepository) : ViewModel() {
+class AlbumViewModel( val albumRepository: AlbumRepository, private val itemsRepository: ItemsRepository) : ViewModel() {
     /** The mutable State that stores the status of the most recent request */
     var albumUiState: AlbumUiState by mutableStateOf(AlbumUiState.Loading)
         private set
@@ -47,6 +47,8 @@ class AlbumViewModel(private val albumRepository: AlbumRepository, private val i
                 initialValue = HomeUiState()
             )
 
+//    val albums : List<Album> = albumRepository.getAlbums()
+
     /**
      * Call getAlbum on init so we can display status immediately.
      */
@@ -56,18 +58,33 @@ class AlbumViewModel(private val albumRepository: AlbumRepository, private val i
 
     private var _selectedPhoto: Photo? = null
 
+    private var _selectedAlbum: Album? = null
+
     val selectedPhoto: Photo
         get() = _selectedPhoto!!
 
-        fun setSelectedPhoto(photo : Photo) {
+        fun setSelectedPhoto(photo : Photo) { // TODO fiks navn til setSelectedPhotoAlbum
             _selectedPhoto = photo
+//            val albumList = albumRepository.getAlbums()
+//            _selectedAlbum = findAlbumForPhoto(_selectedPhoto!!, albumList)
         }
 
+    val selectedAlbum: Album
+        get() = _selectedAlbum!!
+
+        suspend fun setSelectedAlbum(photo : Photo) {
+            val albumList = albumRepository.getAlbums()
+            _selectedAlbum = findAlbumForPhoto(_selectedPhoto!!, albumList)
+        }
+
+    private suspend fun findAlbumForPhoto(photo: Photo, albums: List<Album>): Album? {
+        return albums.find { it.id == photo.id }
+    }
     fun getAlbum() {
         viewModelScope.launch {
             albumUiState = AlbumUiState.Loading
             albumUiState = try {
-                AlbumUiState.Success(albumRepository.getAlbum())
+                AlbumUiState.Success(albumRepository.getAlbum(), albumRepository.getAlbums())
             } catch (e: IOException) {
                 AlbumUiState.Error
             } catch (e: HttpException) {

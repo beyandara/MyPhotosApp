@@ -94,6 +94,8 @@ fun AlbumApp(
         viewModel(factory = AlbumViewModel.Factory)
     val coroutineScope = rememberCoroutineScope()
 
+
+
     Scaffold(
         topBar = {
             AlbumTopAppBar(
@@ -117,8 +119,11 @@ fun AlbumApp(
                     AlbumScreen(
                         albumUiState = viewModel.albumUiState,
                         onShowButtonClicked = {selectedPhoto ->
-                            viewModel.setSelectedPhoto(selectedPhoto)
-                            navController.navigate(AlbumScreens.SelectedPhoto.name) },
+                            coroutineScope.launch {
+                                viewModel.setSelectedPhoto(selectedPhoto)
+                                viewModel.setSelectedAlbum(selectedPhoto)
+                                navController.navigate(AlbumScreens.SelectedPhoto.name)
+                            }},
                         onSaveButtonClicked = {selectedPhoto ->
                             viewModel.setSelectedPhoto(selectedPhoto)
                             coroutineScope.launch {
@@ -137,13 +142,16 @@ fun AlbumApp(
 
                 composable(route = AlbumScreens.SelectedPhoto.name) {
                     val selectedPhoto = viewModel.selectedPhoto
+                    val selectedAlbum = viewModel.selectedAlbum
                     SelectedPhotoScreen(
-                        photo = selectedPhoto
+                        photo = selectedPhoto,
+                        album = selectedAlbum
                     )
                 }
             }
         }
     }
 }
+
 
 
